@@ -4,9 +4,13 @@ import "./Nav.css";
 function NavBar() {
   return (
     <div className="NavBar">
-      <h2>
-        <Link to={"/"}>SwoledBros</Link>
-      </h2>
+      <div className="logo">
+        {" "}
+        <img src="src\assets\Ellipse 88.svg" alt="" />
+        <h2>
+          <Link to={"/"}>SwoledBros</Link>
+        </h2>
+      </div>
       <ul>
         <li>
           <Link to={"/"}>Home</Link>
@@ -21,6 +25,10 @@ function NavBar() {
           <Link to={"/Admin"}>Admin</Link>
         </li>
       </ul>
+      <div className="bt">
+        <button style={{ background: "white", color: "black" }}>Log in</button>
+        <button>Sign up</button>
+      </div>
     </div>
   );
 }

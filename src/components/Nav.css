@@ -16,6 +16,7 @@ ul li {
   height: 32px;
   font-family: "General Sans";
   font-weight: 600;
+  font-size: 16px;
 }
 ul li a {
   text-decoration: none;
@@ -26,12 +27,41 @@ ul li a {
   justify-content: center;
   align-items: center;
 }
-.NavBar h2 {
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo img {
+  height: 47px;
+  width: 47px;
+  margin-left: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo h2 {
   width: 143px;
   height: 32px;
   font-family: Helvetica;
+  margin-left: 40px;
 }
 h2 a {
   text-decoration: none;
   color: black;
+}
+.bt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bt button {
+  width: 171px;
+  height: 66px;
+  border-radius: 70px;
+  margin-right: 5px;
+  color: #ffffff;
+  background: black;
+  font-family: "General Sans";
+  font-weight: 600;
 }
