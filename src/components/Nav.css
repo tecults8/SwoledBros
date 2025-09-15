@@ -14,6 +14,12 @@ ul li {
   margin-right: 56px;
   width: 72px;
   height: 32px;
+  font-family: "General Sans";
+  font-weight: 600;
+}
+ul li a {
+  text-decoration: none;
+  color: black;
 }
 .NavBar {
   display: flex;
@@ -23,4 +29,9 @@ ul li {
 .NavBar h2 {
   width: 143px;
   height: 32px;
+  font-family: Helvetica;
+}
+h2 a {
+  text-decoration: none;
+  color: black;
 }

@@ -2,15 +2,14 @@ import React from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 
-function DietPlanPage() {
+function Contact() {
   return (
     <div>
       <NavBar />
-      <h1>this is test Diet_Plan_Page</h1>
-
+      <h1>this is contact page</h1>
       <Footer />
     </div>
   );
 }
 
-export default DietPlanPage;
+export default Contact;
