@@ -1,0 +1,26 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 88px;
+  width: 1850px;
+  color: black;
+}
+ul li {
+  margin-right: 56px;
+  width: 72px;
+  height: 32px;
+}
+.NavBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.NavBar h2 {
+  width: 143px;
+  height: 32px;
+}
