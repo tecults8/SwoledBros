@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Helvetica;
+}
+button {
+  font-family: "General Sans";
+}
+
+.Hero {
+  height: 85vh;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2rem;
+}
+.HeroCaption {
+  padding: 13rem;
+  margin-bottom: -8rem;
+}
+.lgsbt button {
+  padding: 0.8rem 2rem;
+
+  border-radius: 70px;
+  color: white;
+  background-color: black;
+  font-weight: 600;
+  font-size: 20px;
+}
