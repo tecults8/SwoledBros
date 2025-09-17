@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 ul {
   list-style-type: none;
   margin: 0;
@@ -62,6 +67,8 @@ h2 a {
   margin-right: 5px;
   color: #ffffff;
   background: black;
-  font-family: "General Sans";
   font-weight: 600;
+}
+button {
+  font-family: "General Sans";
 }
