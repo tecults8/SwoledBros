@@ -24,6 +24,9 @@ function NavBar() {
         <li>
           <Link to={"/Admin"}>Admin</Link>
         </li>
+        <li>
+          <Link to={"/Dashboard"}>Dashboard</Link>
+        </li>
       </ul>
       <div className="bt">
         <button style={{ background: "white", color: "black" }}>Log in</button>
