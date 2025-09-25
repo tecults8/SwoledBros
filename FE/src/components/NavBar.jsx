@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Nav.css";
 function NavBar() {
+  const navigate = useNavigate();
   return (
     <div className="NavBar">
       <div className="logo">
@@ -24,10 +25,16 @@ function NavBar() {
         <li>
           <Link to={"/Admin"}>Admin</Link>
         </li>
+        <li>
+          <Link to={"/Dashboard"}>Dashboard</Link>
+        </li>
       </ul>
       <div className="bt">
-        <button style={{ background: "white", color: "black" }}>Log in</button>
-        <button>Sign up</button>
+        <button onClick={
+          () =>
+            navigate('/Login')
+        } style={{ background: "white", color: "black" }}>Log in</button>
+        <button onClick={() => navigate('/SignUp')}>Sign up</button>
       </div>
     </div>
   );
