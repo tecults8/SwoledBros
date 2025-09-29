@@ -1,0 +1,15 @@
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.deps.json
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.runtimeconfig.json
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.dll
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.pdb
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.csproj.AssemblyReference.cache
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.AssemblyInfoInputs.cache
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.AssemblyInfo.cs
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.csproj.CoreCompileInputs.cache
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.sourcelink.json
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.dll
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\refint\SwoledBrosBE.Models.dll
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.pdb
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.genruntimeconfig.cache
+D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\ref\SwoledBrosBE.Models.dll
