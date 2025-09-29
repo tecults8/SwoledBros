@@ -1,41 +1,31 @@
 [
   {
-    "ContainingType": "UserController",
-    "Method": "Login",
-    "RelativePath": "api/User/login",
+    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "Method": "Signin",
+    "RelativePath": "api/Auth/signin",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "login",
-        "Type": "SwoledBrosBE.Models.Users",
+        "Name": "request",
+        "Type": "WebApplication1.Controllers.UserLoginDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "UserController",
-    "Method": "GetProfile",
-    "RelativePath": "api/User/profile",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "UserController",
-    "Method": "SignUp",
-    "RelativePath": "api/User/signup",
+    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "Method": "Signup",
+    "RelativePath": "api/Auth/signup",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
-        "Type": "SwoledBrosBE.Models.Users",
+        "Name": "request",
+        "Type": "WebApplication1.Controllers.UserRegisterDto",
         "IsRequired": true
       }
     ],

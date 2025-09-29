@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SwoledBrosBE.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+576731c4e77aa39cef23f619fa6726e0b1db1594")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89f0a4f0e9a34c569f2bfdd668213678a6aa31d9")]
 [assembly: System.Reflection.AssemblyProductAttribute("SwoledBrosBE.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SwoledBrosBE.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
