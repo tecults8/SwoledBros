@@ -9,11 +9,11 @@ import SignUp from "../pages/SignUp";
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/Home" element={<Home />} />
       <Route path="/Contact" element={<Contact />} />
       <Route path="/Admin" element={<Admin />} />
       <Route path="/Dashboard" element={<Dashboard />} />
-      <Route path="/Login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/SignUp" element={<SignUp />} />
     </Routes>
   );
