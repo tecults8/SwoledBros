@@ -1,3 +1,0 @@
-# Ignore secrets
-appsettings.Development.json
-appsettings.Secrets.json

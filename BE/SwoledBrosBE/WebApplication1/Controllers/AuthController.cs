@@ -72,14 +72,14 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Signin(UserLoginDto request)
         {
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
-                return BadRequest("Username and password are required.");
+                return BadRequest(new {message = "Username and password are required." });
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (user == null) return BadRequest("User not found.");
 
             
             if (!VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt))
-                return BadRequest("Wrong password.");
+                return BadRequest(new {message= "Wrong password." });
 
             string token;
             try
