@@ -9,12 +9,12 @@ function NavBar() {
         {" "}
         <img src="src\assets\Ellipse 88.svg" alt="" />
         <h2>
-          <Link to={"/"}>SwoledBros</Link>
+          <Link to={"/Home"}>SwoledBros</Link>
         </h2>
       </div>
       <ul>
         <li>
-          <Link to={"/"}>Home</Link>
+          <Link to={"/Home"}>Home</Link>
         </li>
         <li>
           <Link to={"/AboutUs"}>About us</Link>
@@ -30,11 +30,13 @@ function NavBar() {
         </li>
       </ul>
       <div className="bt">
-        <button onClick={
-          () =>
-            navigate('/Login')
-        } style={{ background: "white", color: "black" }}>Log in</button>
-        <button onClick={() => navigate('/SignUp')}>Sign up</button>
+        <button
+          onClick={() => navigate("/Login")}
+          style={{ background: "white", color: "black" }}
+        >
+          Log in
+        </button>
+        <button onClick={() => navigate("/SignUp")}>Sign up</button>
       </div>
     </div>
   );

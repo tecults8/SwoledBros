@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using System.Security.Cryptography;
+using System.Text;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using SwoledBrosBE.Models;
 using SwoledBrosBE.Models.FitnessApp.Models;
 
@@ -23,87 +24,113 @@ namespace WebApplication1.Controllers
             _config = config;
         }
 
-        // POST: api/auth/signup
+        
         [HttpPost("signup")]
         public async Task<IActionResult> Signup(UserRegisterDto request)
         {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+                return BadRequest("Username and password are required.");
+
             if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 return BadRequest("Username already exists.");
 
-            CreatePasswordHash(request.Password, out string passwordHash, out string passwordSalt);
+            // Generate salt
+            byte[] saltBytes = RandomNumberGenerator.GetBytes(16);
+            string salt = Convert.ToBase64String(saltBytes);
+
+            // Hash password with PBKDF2
+            string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: request.Password,
+                salt: saltBytes,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 10000,
+                numBytesRequested: 32));
 
             var user = new User
             {
                 Username = request.Username,
                 Email = request.Email,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordHash = hash,
+                PasswordSalt = salt
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error saving user: " + ex.Message);
+            }
 
-            return Ok("User registered successfully.");
+            return Ok(new { message = "User registered successfully" });
         }
 
-        // POST: api/auth/signin
+        
         [HttpPost("signin")]
         public async Task<IActionResult> Signin(UserLoginDto request)
         {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+                return BadRequest("Username and password are required.");
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (user == null) return BadRequest("User not found.");
 
-            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            
+            if (!VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt))
                 return BadRequest("Wrong password.");
 
-            string token = CreateToken(user);
-
-            return Ok(new { Token = token });
-        }
-
-        // ------------------- Helper Methods -------------------
-
-        private void CreatePasswordHash(string password, out string passwordHash, out string passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
+            string token;
+            try
             {
-                var saltBytes = hmac.Key;
-                var hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                passwordSalt = Convert.ToBase64String(saltBytes); // store as string
-                passwordHash = Convert.ToBase64String(hashBytes); // store as string
+                token = CreateToken(user);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Token generation failed: " + ex.Message);
+            }
+
+            return Ok(new {message =  token });
         }
 
-        private bool VerifyPasswordHash(string password, string storedHash, string storedSalt)
+        private bool VerifyPassword(string password, string storedHash, string storedSalt)
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
-            var hashBytes = Convert.FromBase64String(storedHash);
+            string computedHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: saltBytes,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 10000,
+                numBytesRequested: 32));
 
-            using (var hmac = new HMACSHA512(saltBytes))
-            {
-                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(hashBytes);
-            }
+            return computedHash == storedHash;
         }
 
         private string CreateToken(User user)
         {
+            var keyStr = _config["Jwt:Key"];
+            var issuer = _config["Jwt:Issuer"];
+            var audience = _config["Jwt:Audience"];
+
+            if (string.IsNullOrEmpty(keyStr) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
+                throw new Exception("JWT configuration missing!");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyStr));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+            // Only safe claims
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim("username", user.Username),
+                new Claim("email", user.Email ?? "")
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
             var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.Now.AddDays(7),
+                expires: DateTime.Now.AddHours(double.Parse(_config["Jwt:ExpireHours"] ?? "2")),
                 signingCredentials: creds
             );
 
