@@ -5,6 +5,102 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/Admin/UsersWithPlans": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/AddDietPlan/{userId}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDietPlanDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDietPlanDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDietPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/AddWorkoutSplit/{userId}": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkoutSplitDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkoutSplitDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/WorkoutSplitDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Auth/signup": {
       "post": {
         "tags": [
@@ -70,6 +166,44 @@
   },
   "components": {
     "schemas": {
+      "AddDietPlanDto": {
+        "type": "object",
+        "properties": {
+          "dietPlan": {
+            "$ref": "#/components/schemas/DietPlanDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DietPlanDto": {
+        "type": "object",
+        "properties": {
+          "breakfast": {
+            "$ref": "#/components/schemas/MealDto"
+          },
+          "lunch": {
+            "$ref": "#/components/schemas/MealDto"
+          },
+          "dinner": {
+            "$ref": "#/components/schemas/MealDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MealDto": {
+        "type": "object",
+        "properties": {
+          "foodName": {
+            "type": "string",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
       "UserLoginDto": {
         "type": "object",
         "properties": {
@@ -97,6 +231,41 @@
           },
           "password": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkoutExerciseDto": {
+        "type": "object",
+        "properties": {
+          "exerciseName": {
+            "type": "string",
+            "nullable": true
+          },
+          "sets": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "reps": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "WorkoutSplitDto": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "nullable": true
+          },
+          "exercises": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkoutExerciseDto"
+            },
             "nullable": true
           }
         },
