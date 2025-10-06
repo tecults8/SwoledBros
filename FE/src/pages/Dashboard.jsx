@@ -47,39 +47,40 @@ function Dashboard() {
                             <p style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 10px 0' }}>Hello,</p>
                             <p style={{ fontSize: '18px', margin: '0' }}>Your current weight is <span style={{ fontSize: '36px', fontWeight: 'bold' }}>83kgs</span></p>
                         </div>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '20px'
-                        }}>
+                        <a href='/DietPlan'>
                             <div style={{
-                                backgroundColor: '#FFFFFF',
-                                color: '#1A1A1A',
-                                padding: '30px',
-                                borderRadius: '20px',
-                                minHeight: '90px',
                                 display: 'flex',
-                                alignItems: 'center',
-                                fontSize: '22px',
-                                fontWeight: '600',
-                                boxShadow: '1px 1px #9E9E9E',
+                                flexDirection: 'column',
+                                gap: '20px'
                             }}>
-                                Diet Plan
-                            </div>
-                            <div style={{
-                                backgroundColor: '#FFFFFF',
-                                color: '#1A1A1A',
-                                padding: '30px',
-                                borderRadius: '20px',
-                                minHeight: '90px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                fontSize: '22px',
-                                fontWeight: '600', boxShadow: '1px 1px #9E9E9E',
-                            }}>
-                                Workout split
-                            </div>
-                        </div>
+                                <div style={{
+                                    backgroundColor: '#FFFFFF',
+                                    color: '#1A1A1A',
+                                    padding: '30px',
+                                    borderRadius: '20px',
+                                    minHeight: '90px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    fontSize: '22px',
+                                    fontWeight: '600',
+                                    boxShadow: '1px 1px #9E9E9E',
+                                }}>
+                                    Diet Plan
+                                </div>
+                                <div style={{
+                                    backgroundColor: '#FFFFFF',
+                                    color: '#1A1A1A',
+                                    padding: '30px',
+                                    borderRadius: '20px',
+                                    minHeight: '90px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    fontSize: '22px',
+                                    fontWeight: '600', boxShadow: '1px 1px #9E9E9E',
+                                }}>
+                                    Workout split
+                                </div>
+                            </div></a>
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
