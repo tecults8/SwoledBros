@@ -1,0 +1,140 @@
+/* Overall Layout */
+.workout-container {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding: 2rem;
+  font-family: "Inter", sans-serif;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1f2937;
+  border-bottom: 4px solid #3b82f6;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+/* Day Buttons */
+.day-nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.day-btn {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  border: none;
+  background-color: white;
+  color: #374151;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.day-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.day-btn.selected {
+  background-color: #ef4444;
+  color: white;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.4);
+}
+
+/* Card */
+.workout-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f3f4f6;
+  min-height: 300px;
+}
+
+/* Loading Spinner */
+.loading {
+  text-align: center;
+  padding: 3rem 0;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 4px solid #ef4444;
+  border-top-color: transparent;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error State */
+.error {
+  text-align: center;
+  color: #b91c1c;
+  font-weight: 500;
+  background: #fee2e2;
+  border-left: 4px solid #ef4444;
+  padding: 1rem;
+  border-radius: 0.75rem;
+}
+
+/* Workout Display */
+.workout-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.workout-column.second {
+  border-left: 1px solid #e5e7eb;
+  padding-left: 2rem;
+}
+
+.workout-item {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.workout-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.workout-sets {
+  text-align: right;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Rest / Empty State */
+.rest-day,
+.no-workout {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.rest-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.rest-text {
+  color: #6b7280;
+  margin-top: 0.5rem;
+}

@@ -6,6 +6,7 @@ import Admin from "../pages/Admin";
 import Dashboard from "../pages/Dashboard";
 import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
+import WorkoutPlan from "../pages/WorkoutPlan";
 import ProtectedRoute from "../components/ProtectedRoute"; // import the guard
 
 function AppRoutes() {
@@ -44,6 +45,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/WorkoutPlan"
+        element={
+          <ProtectedRoute>
+            <WorkoutPlan />
           </ProtectedRoute>
         }
       />
