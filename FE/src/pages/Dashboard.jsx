@@ -90,29 +90,22 @@ function Dashboard() {
               >
                 Diet Plan
               </div>
-              <a
-                href="/WorkoutPlan"
+              <div
                 style={{
-                  textDecoration: "none",
+                  backgroundColor: "#FFFFFF",
+                  color: "#1A1A1A",
+                  padding: "30px",
+                  borderRadius: "20px",
+                  minHeight: "90px",
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: "22px",
+                  fontWeight: "600",
+                  boxShadow: "1px 1px #9E9E9E",
                 }}
               >
-                <div
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    color: "#1A1A1A",
-                    padding: "30px",
-                    borderRadius: "20px",
-                    minHeight: "90px",
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "22px",
-                    fontWeight: "600",
-                    boxShadow: "1px 1px #9E9E9E",
-                  }}
-                >
-                  Workout split
-                </div>
-              </a>
+                Workout split
+              </div>
             </div>
             <div
               style={{
