@@ -37,17 +37,59 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddDietPlanDto"
+                "$ref": "#/components/schemas/DietPlanDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddDietPlanDto"
+                "$ref": "#/components/schemas/DietPlanDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/AddDietPlanDto"
+                "$ref": "#/components/schemas/DietPlanDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/UpdateDietPlan/{userId}": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DietPlanDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DietPlanDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DietPlanDto"
               }
             }
           }
@@ -94,6 +136,52 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/Workout/{userId}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Admin/DietPlan/{userId}": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -166,26 +254,50 @@
   },
   "components": {
     "schemas": {
-      "AddDietPlanDto": {
-        "type": "object",
-        "properties": {
-          "dietPlan": {
-            "$ref": "#/components/schemas/DietPlanDto"
-          }
-        },
-        "additionalProperties": false
-      },
       "DietPlanDto": {
         "type": "object",
         "properties": {
           "breakfast": {
-            "$ref": "#/components/schemas/MealDto"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealDto"
+            },
+            "nullable": true
           },
           "lunch": {
-            "$ref": "#/components/schemas/MealDto"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealDto"
+            },
+            "nullable": true
           },
           "dinner": {
-            "$ref": "#/components/schemas/MealDto"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealDto"
+            },
+            "nullable": true
+          },
+          "brunchSnack": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealDto"
+            },
+            "nullable": true
+          },
+          "eveningSnack": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealDto"
+            },
+            "nullable": true
+          },
+          "preBedSnack": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MealDto"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -3,37 +3,35 @@ import "./WorkoutPlan.css";
 
 const DAYS_OF_WEEK = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-const WorkoutSplitComponent = () => {
+const WorkoutSplitComponent = ({ userId }) => {
   const [workoutSplit, setWorkoutSplit] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      setError(null);
+    const loadWorkoutData = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(
-          "https://your-api-url.com/api/workoutsplit"
+          `https://localhost:5001/api/Admin/Workout/${userId}`
         );
-        if (!response.ok) throw new Error("Failed to fetch data");
+        if (!response.ok) throw new Error("Failed to fetch workout data");
+
         const data = await response.json();
         setWorkoutSplit(data);
 
-        // Default to today's day
-        const todayIndex = new Date().getDay();
-        const currentDay = DAYS_OF_WEEK[todayIndex];
-        setSelectedDay(currentDay);
+        const today = new Date().getDay();
+        setSelectedDay(DAYS_OF_WEEK[today]);
       } catch (err) {
-        console.error("Fetch error:", err);
-        setError("Failed to load workout data. Please try again later.");
+        setError("Failed to load workout data");
       } finally {
         setIsLoading(false);
       }
     };
-    loadData();
-  }, []);
+
+    loadWorkoutData();
+  }, [userId]);
 
   const availableDays = useMemo(
     () => Object.keys(workoutSplit),
@@ -44,9 +42,9 @@ const WorkoutSplitComponent = () => {
     [workoutSplit, selectedDay]
   );
 
-  const halfLength = Math.ceil(currentWorkout.length / 2);
-  const column1 = currentWorkout.slice(0, halfLength);
-  const column2 = currentWorkout.slice(halfLength);
+  const half = Math.ceil(currentWorkout.length / 2);
+  const col1 = currentWorkout.slice(0, half);
+  const col2 = currentWorkout.slice(half);
 
   const WorkoutItem = ({ name, setsReps }) => (
     <div className="workout-item">
@@ -56,55 +54,22 @@ const WorkoutSplitComponent = () => {
   );
 
   const renderContent = () => {
-    if (isLoading) {
-      return (
-        <div className="loading">
-          <div className="spinner"></div>
-          <p>Loading workout schedule...</p>
-        </div>
-      );
-    }
-
-    if (error) {
-      return (
-        <div className="error">
-          <p>{error}</p>
-        </div>
-      );
-    }
-
-    const isRestDay =
-      currentWorkout.length > 0 &&
-      currentWorkout[0].name?.toLowerCase().includes("rest");
-
-    if (isRestDay) {
-      return (
-        <div className="rest-day">
-          <p className="rest-title">🎉 REST DAY 🎉</p>
-          <p className="rest-text">Recovery is essential for muscle growth!</p>
-        </div>
-      );
-    }
-
-    if (currentWorkout.length === 0) {
-      return (
-        <div className="no-workout">
-          <p>No workout defined for {selectedDay}.</p>
-        </div>
-      );
-    }
+    if (isLoading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+    if (!currentWorkout.length)
+      return <p>No workout defined for {selectedDay}.</p>;
 
     return (
       <div className="workout-columns">
         <div className="workout-column">
-          {column1.map((item, index) => (
-            <WorkoutItem key={index} {...item} />
+          {col1.map((item, i) => (
+            <WorkoutItem key={i} {...item} />
           ))}
         </div>
-        {column2.length > 0 && (
-          <div className="workout-column second">
-            {column2.map((item, index) => (
-              <WorkoutItem key={index} {...item} />
+        {col2.length > 0 && (
+          <div className="workout-column">
+            {col2.map((item, i) => (
+              <WorkoutItem key={i} {...item} />
             ))}
           </div>
         )}
@@ -114,30 +79,24 @@ const WorkoutSplitComponent = () => {
 
   return (
     <div className="workout-container">
-      <h1 className="title">Workout Split</h1>
-
+      <h1>Workout Split</h1>
       <div className="day-nav">
-        {DAYS_OF_WEEK.map((day) => {
-          const hasData = availableDays.includes(day);
-          const isSelected = day === selectedDay;
-          return (
-            <button
-              key={day}
-              onClick={() => setSelectedDay(day)}
-              disabled={isLoading || !hasData}
-              className={`day-btn ${isSelected ? "selected" : ""}`}
-            >
-              {day}
-            </button>
-          );
-        })}
+        {DAYS_OF_WEEK.map((day) => (
+          <button
+            key={day}
+            className={`day-btn ${day === selectedDay ? "selected" : ""}`}
+            onClick={() => setSelectedDay(day)}
+            disabled={!availableDays.includes(day)}
+          >
+            {day}
+          </button>
+        ))}
       </div>
-
       <div className="workout-card">{renderContent()}</div>
     </div>
   );
 };
 
 export default function App() {
-  return <WorkoutSplitComponent />;
+  return <WorkoutSplitComponent userId={1} />; // Pass logged-in user ID
 }

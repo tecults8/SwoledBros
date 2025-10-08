@@ -74,38 +74,52 @@ function Dashboard() {
                 gap: "20px",
               }}
             >
-              <div
+              <a
+                href="/DietPlan"
                 style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#1A1A1A",
-                  padding: "30px",
-                  borderRadius: "20px",
-                  minHeight: "90px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  boxShadow: "1px 1px #9E9E9E",
+                  textDecoration: "none",
                 }}
               >
-                Diet Plan
-              </div>
-              <div
+                <div
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    color: "#1A1A1A",
+                    padding: "30px",
+                    borderRadius: "20px",
+                    minHeight: "90px",
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "22px",
+                    fontWeight: "600",
+                    boxShadow: "1px 1px #9E9E9E",
+                  }}
+                >
+                  Diet Plan
+                </div>
+              </a>
+              <a
+                href="/WorkoutPlan"
                 style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#1A1A1A",
-                  padding: "30px",
-                  borderRadius: "20px",
-                  minHeight: "90px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  boxShadow: "1px 1px #9E9E9E",
+                  textDecoration: "none",
                 }}
               >
-                Workout split
-              </div>
+                <div
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    color: "#1A1A1A",
+                    padding: "30px",
+                    borderRadius: "20px",
+                    minHeight: "90px",
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "22px",
+                    fontWeight: "600",
+                    boxShadow: "1px 1px #9E9E9E",
+                  }}
+                >
+                  Workout split
+                </div>
+              </a>
             </div>
             <div
               style={{

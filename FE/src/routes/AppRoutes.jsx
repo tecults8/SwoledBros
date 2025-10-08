@@ -8,6 +8,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import WorkoutPlan from "../pages/WorkoutPlan";
 import ProtectedRoute from "../components/ProtectedRoute"; // import the guard
+import DietPlan from "../pages/DietPlan";
 
 function AppRoutes() {
   return (
@@ -53,6 +54,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <WorkoutPlan />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/DietPlan"
+        element={
+          <ProtectedRoute>
+            <DietPlan />
           </ProtectedRoute>
         }
       />

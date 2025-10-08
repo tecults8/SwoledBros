@@ -14,7 +14,7 @@
       },
       {
         "Name": "model",
-        "Type": "SwoledBrosBE.Controllers.AdminController\u002BAddDietPlanDto",
+        "Type": "SwoledBrosBE.Controllers.AdminController\u002BDietPlanDto",
         "IsRequired": true
       }
     ],
@@ -43,12 +43,65 @@
   },
   {
     "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "GetUserDietPlan",
+    "RelativePath": "api/Admin/DietPlan/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "UpdateDietPlan",
+    "RelativePath": "api/Admin/UpdateDietPlan/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "model",
+        "Type": "SwoledBrosBE.Controllers.AdminController\u002BDietPlanDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
     "Method": "GetUsersWithPlans",
     "RelativePath": "api/Admin/UsersWithPlans",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "GetUserWorkout",
+    "RelativePath": "api/Admin/Workout/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
