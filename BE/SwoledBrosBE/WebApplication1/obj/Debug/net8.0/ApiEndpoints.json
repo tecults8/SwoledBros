@@ -105,7 +105,7 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "ContainingType": "SwoledBrosBE.Controllers.AuthController",
     "Method": "Signin",
     "RelativePath": "api/Auth/signin",
     "HttpMethod": "POST",
@@ -114,14 +114,14 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "WebApplication1.Controllers.UserLoginDto",
+        "Type": "SwoledBrosBE.Controllers.UserLoginDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "ContainingType": "SwoledBrosBE.Controllers.AuthController",
     "Method": "Signup",
     "RelativePath": "api/Auth/signup",
     "HttpMethod": "POST",
@@ -130,7 +130,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "WebApplication1.Controllers.UserRegisterDto",
+        "Type": "SwoledBrosBE.Controllers.UserRegisterDto",
         "IsRequired": true
       }
     ],

@@ -1,7 +1,19 @@
-import React from "react";
-import NavBar from "../components/NavBar"; // Removed NavBar import
+import React, { useEffect, useState } from "react";
+import NavBar from "../components/NavBar";
 import { Navigate } from "react-router-dom";
+
 function Dashboard() {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      const user = JSON.parse(userData);
+      setUsername(user?.username || "");
+    }
+  }, []);
+
   return (
     <div>
       <NavBar />
@@ -29,7 +41,9 @@ function Dashboard() {
             }}
           >
             Rise And Shine,
-            <span style={{ color: "#FF3737", marginLeft: "10px" }}>Sachin</span>
+            <span style={{ color: "#FF3737", marginLeft: "10px" }}>
+              {username}
+            </span>
           </h1>
 
           <div
