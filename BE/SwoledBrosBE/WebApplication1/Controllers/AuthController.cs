@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using SwoledBrosBE.Models;
 using SwoledBrosBE.Models.FitnessApp.Models;
 
-namespace WebApplication1.Controllers
+namespace SwoledBrosBE.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -24,21 +24,19 @@ namespace WebApplication1.Controllers
             _config = config;
         }
 
-        
+        // ---------------- SIGNUP ----------------
         [HttpPost("signup")]
         public async Task<IActionResult> Signup(UserRegisterDto request)
         {
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
-                return BadRequest("Username and password are required.");
+                return BadRequest(new { message = "Username and password are required." });
 
             if (await _context.Users.AnyAsync(u => u.Username == request.Username))
-                return BadRequest("Username already exists.");
+                return BadRequest(new { message = "Username already exists." });
 
-            // Generate salt
             byte[] saltBytes = RandomNumberGenerator.GetBytes(16);
             string salt = Convert.ToBase64String(saltBytes);
 
-            // Hash password with PBKDF2
             string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: request.Password,
                 salt: saltBytes,
@@ -54,44 +52,35 @@ namespace WebApplication1.Controllers
                 PasswordSalt = salt
             };
 
-            try
-            {
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Error saving user: " + ex.Message);
-            }
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
             return Ok(new { message = "User registered successfully" });
         }
 
-        
+        // ---------------- SIGNIN ----------------
         [HttpPost("signin")]
         public async Task<IActionResult> Signin(UserLoginDto request)
         {
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
-                return BadRequest(new {message = "Username and password are required." });
+                return BadRequest(new { message = "Username and password are required." });
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
-            if (user == null) return BadRequest("User not found.");
+            if (user == null)
+                return BadRequest(new { message = "User not found." });
 
-            
             if (!VerifyPassword(request.Password, user.PasswordHash, user.PasswordSalt))
-                return BadRequest(new {message= "Wrong password." });
+                return BadRequest(new { message = "Wrong password." });
 
-            string token;
-            try
-            {
-                token = CreateToken(user);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Token generation failed: " + ex.Message);
-            }
+            var token = CreateToken(user);
 
-            return Ok(new {message =  token });
+            return Ok(new
+            {
+                id = user.Id,
+                username = user.Username,
+                email = user.Email,
+                token = token
+            });
         }
 
         private bool VerifyPassword(string password, string storedHash, string storedSalt)
@@ -109,26 +98,19 @@ namespace WebApplication1.Controllers
 
         private string CreateToken(User user)
         {
-            var keyStr = _config["Jwt:Key"];
-            var issuer = _config["Jwt:Issuer"];
-            var audience = _config["Jwt:Audience"];
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            if (string.IsNullOrEmpty(keyStr) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience))
-                throw new Exception("JWT configuration missing!");
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyStr));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-
-            // Only safe claims
             var claims = new[]
             {
+                new Claim("id", user.Id.ToString()),
                 new Claim("username", user.Username),
                 new Claim("email", user.Email ?? "")
             };
 
             var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddHours(double.Parse(_config["Jwt:ExpireHours"] ?? "2")),
                 signingCredentials: creds
@@ -138,7 +120,6 @@ namespace WebApplication1.Controllers
         }
     }
 
-    // ------------------- DTOs -------------------
     public class UserRegisterDto
     {
         public string Username { get; set; }

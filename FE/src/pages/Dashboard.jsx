@@ -1,9 +1,22 @@
+import React, { useEffect, useState } from "react";
+import NavBar from "../components/NavBar";
+import { Navigate } from "react-router-dom";
+
 import React from "react";
 import NavBar from "../components/NavBar";
 import "./Dashboard.css";
 
 function Dashboard() {
-  const username = localStorage.getItem("username") || "User"; // show logged-in username
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      const user = JSON.parse(userData);
+      setUsername(user?.username || "");
+    }
+  }, []);
 
   return (
     <div className="dashboard">

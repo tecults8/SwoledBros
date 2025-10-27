@@ -3,36 +3,68 @@ import "./WorkoutPlan.css";
 
 const DAYS_OF_WEEK = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
-const WorkoutSplitComponent = ({ userId }) => {
+const WorkoutSplitComponent = () => {
+  const [userId, setUserId] = useState(null);
   const [workoutSplit, setWorkoutSplit] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // ✅ Step 1: Get userId & token from localStorage on mount
   useEffect(() => {
-    const loadWorkoutData = async () => {
+    const storedUserId = localStorage.getItem("userId");
+    const storedToken = localStorage.getItem("jwtToken");
+
+    if (storedUserId && storedToken) {
+      setUserId(storedUserId);
+      setError(null);
+    } else {
+      setError("User not logged in. Please sign in again.");
+      setIsLoading(false);
+    }
+  }, []);
+
+  // ✅ Step 2: Fetch user workout data when userId is set
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchWorkout = async () => {
       try {
         setIsLoading(true);
+
+        const token = localStorage.getItem("jwtToken");
         const response = await fetch(
-          `https://localhost:5001/api/Admin/Workout/${userId}`
+          `https://localhost:7239/api/Admin/Workout/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
-        if (!response.ok) throw new Error("Failed to fetch workout data");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch workout data");
+        }
 
         const data = await response.json();
         setWorkoutSplit(data);
 
+        // Default to today’s workout if exists
         const today = new Date().getDay();
         setSelectedDay(DAYS_OF_WEEK[today]);
       } catch (err) {
-        setError("Failed to load workout data");
+        console.error(err);
+        setError("Could not load workout data.");
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadWorkoutData();
+    fetchWorkout();
   }, [userId]);
 
+  // ✅ Derived data
   const availableDays = useMemo(
     () => Object.keys(workoutSplit),
     [workoutSplit]
@@ -42,6 +74,7 @@ const WorkoutSplitComponent = ({ userId }) => {
     [workoutSplit, selectedDay]
   );
 
+  // ✅ Split columns
   const half = Math.ceil(currentWorkout.length / 2);
   const col1 = currentWorkout.slice(0, half);
   const col2 = currentWorkout.slice(half);
@@ -55,7 +88,7 @@ const WorkoutSplitComponent = ({ userId }) => {
 
   const renderContent = () => {
     if (isLoading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
+    if (error) return <p style={{ color: "red" }}>{error}</p>;
     if (!currentWorkout.length)
       return <p>No workout defined for {selectedDay}.</p>;
 
@@ -97,6 +130,4 @@ const WorkoutSplitComponent = ({ userId }) => {
   );
 };
 
-export default function App() {
-  return <WorkoutSplitComponent userId={1} />; // Pass logged-in user ID
-}
+export default WorkoutSplitComponent;
