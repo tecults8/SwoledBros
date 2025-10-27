@@ -1,6 +1,111 @@
 [
   {
-    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "AddDietPlan",
+    "RelativePath": "api/Admin/AddDietPlan/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "model",
+        "Type": "SwoledBrosBE.Controllers.AdminController\u002BDietPlanDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "AddWorkoutSplit",
+    "RelativePath": "api/Admin/AddWorkoutSplit/{userId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "model",
+        "Type": "SwoledBrosBE.Controllers.AdminController\u002BWorkoutSplitDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "GetUserDietPlan",
+    "RelativePath": "api/Admin/DietPlan/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "UpdateDietPlan",
+    "RelativePath": "api/Admin/UpdateDietPlan/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "model",
+        "Type": "SwoledBrosBE.Controllers.AdminController\u002BDietPlanDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "GetUsersWithPlans",
+    "RelativePath": "api/Admin/UsersWithPlans",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "GetUserWorkout",
+    "RelativePath": "api/Admin/Workout/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AuthController",
     "Method": "Signin",
     "RelativePath": "api/Auth/signin",
     "HttpMethod": "POST",
@@ -9,14 +114,14 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "WebApplication1.Controllers.UserLoginDto",
+        "Type": "SwoledBrosBE.Controllers.UserLoginDto",
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "WebApplication1.Controllers.AuthController",
+    "ContainingType": "SwoledBrosBE.Controllers.AuthController",
     "Method": "Signup",
     "RelativePath": "api/Auth/signup",
     "HttpMethod": "POST",
@@ -25,7 +130,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "WebApplication1.Controllers.UserRegisterDto",
+        "Type": "SwoledBrosBE.Controllers.UserRegisterDto",
         "IsRequired": true
       }
     ],

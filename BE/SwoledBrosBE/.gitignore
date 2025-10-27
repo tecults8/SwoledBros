@@ -1,0 +1,7 @@
+# Ignore secrets
+appsettings.Development.json
+appsettings.Secrets.json
+.vs/
+*.suo
+[Bb]in/
+[Oo]bj/

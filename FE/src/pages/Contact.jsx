@@ -1,7 +1,7 @@
 import React from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import './Contact.css'
+import "./Contact.css";
 function Contact() {
   return (
     <div>
@@ -14,12 +14,12 @@ function Contact() {
         <br />
         <br />
         <br />
-        <div style={{ display: "flex", columnGap: '100px' }}>
+        <div style={{ display: "flex", columnGap: "100px" }}>
           <div className="contactButton">Contact Us</div>
           <div className="contactButton">Login / Sign Up</div>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
