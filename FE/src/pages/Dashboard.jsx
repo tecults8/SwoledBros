@@ -1,272 +1,60 @@
 import React from "react";
-import NavBar from "../components/NavBar"; // Removed NavBar import
-import { Navigate } from "react-router-dom";
-function Dashboard() {
-  return (
-    <div>
-      <NavBar />
-      <div
-        style={{
-          fontFamily: "Arial, sans-serif",
-          backgroundColor: "#ffffff",
-          minHeight: "100vh",
-          paddingBottom: "50px",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: "20px",
-          }}
-        >
-          <h1
-            style={{
-              fontSize: "48px",
-              fontWeight: "bold",
-              color: "#1A1A1A",
-              marginBottom: "40px",
-            }}
-          >
-            Rise And Shine,
-            <span style={{ color: "#FF3737", marginLeft: "10px" }}>Sachin</span>
-          </h1>
+import NavBar from "../components/NavBar";
+import "./Dashboard.css";
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "30px",
-            }}
-          >
-            <div
-              style={{
-                background: "#FF3737",
-                color: "#FFFFFF",
-                padding: "30px",
-                borderRadius: "20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                minHeight: "200px",
-              }}
-            >
-              <p
-                style={{
-                  fontSize: "24px",
-                  fontWeight: "bold",
-                  margin: "0 0 10px 0",
-                }}
-              >
-                Hello,
-              </p>
-              <p style={{ fontSize: "18px", margin: "0" }}>
-                Your current weight is{" "}
-                <span style={{ fontSize: "36px", fontWeight: "bold" }}>
-                  83kgs
-                </span>
-              </p>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              <a
-                href="/DietPlan"
-                style={{
-                  textDecoration: "none",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    color: "#1A1A1A",
-                    padding: "30px",
-                    borderRadius: "20px",
-                    minHeight: "90px",
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "22px",
-                    fontWeight: "600",
-                    boxShadow: "1px 1px #9E9E9E",
-                  }}
-                >
-                  Diet Plan
-                </div>
-              </a>
-              <a
-                href="/WorkoutPlan"
-                style={{
-                  textDecoration: "none",
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: "#FFFFFF",
-                    color: "#1A1A1A",
-                    padding: "30px",
-                    borderRadius: "20px",
-                    minHeight: "90px",
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "22px",
-                    fontWeight: "600",
-                    boxShadow: "1px 1px #9E9E9E",
-                  }}
-                >
-                  Workout split
-                </div>
-              </a>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-              }}
-            >
-              <div
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#1A1A1A",
-                  padding: "30px",
-                  borderRadius: "20px",
-                  minHeight: "90px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  boxShadow: "1px 1px #9E9E9E",
-                }}
-              >
-                Measurements
-              </div>
-              <div
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#1A1A1A",
-                  padding: "30px",
-                  borderRadius: "20px",
-                  minHeight: "90px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  boxShadow: "1px 1px #9E9E9E",
-                }}
-              >
-                Exercise index
-              </div>
-            </div>
+function Dashboard() {
+  const username = localStorage.getItem("username") || "User"; // show logged-in username
+
+  return (
+    <div className="dashboard">
+      <NavBar />
+      <div className="dashboard-content">
+        <div className="dashboard-header">
+          <h1>
+            Rise And Shine,
+            <span className="highlight"> {username}</span>
+          </h1>
+        </div>
+
+        {/* === Top Grid Section === */}
+        <div className="dashboard-grid top-grid">
+          <div className="card red-card">
+            <p className="card-title">Hello,</p>
+            <p className="card-text">
+              Your current weight is <span className="weight">83kgs</span>
+            </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: "30px",
-              marginTop: "30px",
-            }}
-          >
-            <div
-              style={{
-                backgroundColor: "#FFFFFF",
-                color: "#1A1A1A",
-                padding: "30px",
-                borderRadius: "20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                minHeight: "250px",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  margin: "0 0 10px 0",
-                }}
-              >
-                Progress checker
-              </h3>
-              <p
-                style={{
-                  fontSize: "16px",
-                  color: "#666",
-                  margin: "0 0 20px 0",
-                }}
-              >
-                Check the gains and progress you made accurately and graphically
-              </p>
-              <div
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  backgroundColor: "#f0f0f0",
-                  borderRadius: "10px",
-                  marginBottom: "20px",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "14px",
-                  color: "#888",
-                }}
-              >
-                Graph placeholder
-              </div>
-              <button
-                style={{
-                  backgroundColor: "#1A1A1A",
-                  color: "#FFFFFF",
-                  border: "none",
-                  padding: "12px 25px",
-                  borderRadius: "10px",
-                  fontSize: "16px",
-                  cursor: "pointer",
-                  fontWeight: "600",
-                }}
-              >
-                Check It Out
-              </button>
-            </div>
-            <div
-              style={{
-                background: "#FF3737",
-                color: "#FFFFFF",
-                padding: "30px",
-                borderRadius: "20px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                alignItems: "center",
-                minHeight: "250px",
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: "22px",
-                  fontWeight: "600",
-                  margin: "0 0 10px 0",
-                }}
-              >
-                Step counts
-              </h3>
-              <p
-                style={{
-                  fontSize: "72px",
-                  fontWeight: "bold",
-                  margin: "0",
-                  lineHeight: "1",
-                }}
-              >
-                15
-              </p>
-              <p style={{ fontSize: "24px", margin: "0" }}>steps</p>
-            </div>
+          <div className="link-group">
+            <a href="/DietPlan" className="link-card">
+              Diet Plan
+            </a>
+            <a href="/WorkoutPlan" className="link-card">
+              Workout split
+            </a>
+          </div>
+
+          <div className="link-group">
+            <div className="link-card">Measurements</div>
+            <div className="link-card">Exercise index</div>
+          </div>
+        </div>
+
+        {/* === Bottom Grid Section === */}
+        <div className="dashboard-grid bottom-grid">
+          <div className="card white-card">
+            <h3 className="card-subtitle">Progress checker</h3>
+            <p className="card-desc">
+              Check the gains and progress you made accurately and graphically
+            </p>
+            <div className="graph-placeholder">Graph placeholder</div>
+            <button className="btn-dark">Check It Out</button>
+          </div>
+
+          <div className="card red-card step-card">
+            <h3 className="card-subtitle">Step counts</h3>
+            <p className="steps-number">15</p>
+            <p className="steps-label">steps</p>
           </div>
         </div>
       </div>

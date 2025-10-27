@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5XG4HvwmGuA=",
+  "dgSpecHash": "jbuiLNAYCYY=",
   "success": true,
-  "projectFilePath": "D:\\Pilot\\SwoledBros\\BE\\SwoledBrosBE\\WebApplication1\\WebApplication1.csproj",
+  "projectFilePath": "D:\\Swoled Bros\\SwoledBros\\BE\\SwoledBrosBE\\WebApplication1\\WebApplication1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Asus\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

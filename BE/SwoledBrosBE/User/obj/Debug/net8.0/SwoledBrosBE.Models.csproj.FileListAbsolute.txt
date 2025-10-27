@@ -13,3 +13,18 @@ D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\refint\SwoledBrosBE.Mo
 D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.pdb
 D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.genruntimeconfig.cache
 D:\Pilot\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\ref\SwoledBrosBE.Models.dll
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.deps.json
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.runtimeconfig.json
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.dll
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\bin\Debug\net8.0\SwoledBrosBE.Models.pdb
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.csproj.AssemblyReference.cache
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.AssemblyInfoInputs.cache
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.AssemblyInfo.cs
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.csproj.CoreCompileInputs.cache
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.sourcelink.json
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.dll
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\refint\SwoledBrosBE.Models.dll
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.pdb
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\SwoledBrosBE.Models.genruntimeconfig.cache
+D:\Swoled Bros\SwoledBros\BE\SwoledBrosBE\User\obj\Debug\net8.0\ref\SwoledBrosBE.Models.dll
