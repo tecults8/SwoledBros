@@ -49,7 +49,7 @@ const Login = () => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Login failed");
+      if (!res.ok) throw new Error("Login failed");
 
       // ✅ Store user details globally for later access
       localStorage.setItem("jwtToken", data.token);
@@ -63,7 +63,7 @@ const Login = () => {
       // ✅ Redirect after short delay to show success
       setTimeout(() => navigate("/Home"), 800);
     } catch (err) {
-      setError(err.message);
+      setError('Please Sign Up before signing in...');
     } finally {
       setLoading(false);
     }
