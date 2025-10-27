@@ -205,13 +205,13 @@ function AdminDashboard() {
                 <input
                   type="number"
                   placeholder="Sets"
-                  value={ex.sets || ""}
+                  defaultValuevalue={ex.sets || ""}
                   onChange={(e) => handleWorkoutInputChange(i, "sets", e.target.value)}
                 />
                 <input
                   type="number"
                   placeholder="Reps"
-                  value={ex.reps || ""}
+                  defaultValuevalue={ex.reps || ""}
                   onChange={(e) => handleWorkoutInputChange(i, "reps", e.target.value)}
                 />
               </div>

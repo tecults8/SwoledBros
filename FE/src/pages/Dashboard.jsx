@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import { Navigate } from "react-router-dom";
-
-import React from "react";
-import NavBar from "../components/NavBar";
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -11,7 +7,6 @@ function Dashboard() {
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
-
     if (userData) {
       const user = JSON.parse(userData);
       setUsername(user?.username || "");
@@ -21,46 +16,41 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <NavBar />
-      <div className="dashboard-content">
-        <div className="dashboard-header">
-          <h1>
-            Rise And Shine,
-            <span className="highlight"> {username}</span>
-          </h1>
-        </div>
+      <div className="dashboard-container">
+        <h1 className="dashboard-title">
+          Rise And Shine,<span className="highlight"> {username}</span>
+        </h1>
 
-        {/* === Top Grid Section === */}
-        <div className="dashboard-grid top-grid">
+        {/* === Top Section === */}
+        <div className="top-section">
+          {/* Red Card */}
           <div className="card red-card">
             <p className="card-title">Hello,</p>
             <p className="card-text">
-              Your current weight is <span className="weight">83kgs</span>
+              Your current weight is <span className="weight">83 kgs</span>
             </p>
           </div>
 
-          <div className="link-group">
-            <a href="/DietPlan" className="link-card">
-              Diet Plan
-            </a>
-            <a href="/WorkoutPlan" className="link-card">
-              Workout split
-            </a>
-          </div>
-
-          <div className="link-group">
-            <div className="link-card">Measurements</div>
-            <div className="link-card">Exercise index</div>
-          </div>
+          {/* White Cards */}
+          <div className="card white-card"><a href="/DietPlan" style={{ textDecoration: 'none', color: '#1A1A1A' }}>Diet Plan</a></div>
+          <div className="card white-card">Measurements</div>
+          <div className="card white-card"><a href="/WorkoutPlan" style={{ textDecoration: 'none', color: '#1A1A1A' }}>Workout split</a></div>
+          <div className="card white-card">Exercise index</div>
         </div>
 
-        {/* === Bottom Grid Section === */}
-        <div className="dashboard-grid bottom-grid">
-          <div className="card white-card">
+        {/* === Bottom Section === */}
+        <div className="bottom-section">
+          <div className="card white-card progress-card">
             <h3 className="card-subtitle">Progress checker</h3>
             <p className="card-desc">
               Check the gains and progress you made accurately and graphically
             </p>
-            <div className="graph-placeholder">Graph placeholder</div>
+            <div className="graph-placeholder">
+              <img
+                src="https://quickchart.io/chart?c={type:'line',data:{labels:['21','24','26','28','29','30'],datasets:[{label:'Gains',data:[1,3,4,6,7,9]}]}}"
+                alt="Graph"
+              />
+            </div>
             <button className="btn-dark">Check It Out</button>
           </div>
 

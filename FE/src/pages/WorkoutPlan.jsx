@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./WorkoutPlan.css";
+import NavBar from "../components/NavBar";
 
 const DAYS_OF_WEEK = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
@@ -111,21 +112,24 @@ const WorkoutSplitComponent = () => {
   };
 
   return (
-    <div className="workout-container">
-      <h1>Workout Split</h1>
-      <div className="day-nav">
-        {DAYS_OF_WEEK.map((day) => (
-          <button
-            key={day}
-            className={`day-btn ${day === selectedDay ? "selected" : ""}`}
-            onClick={() => setSelectedDay(day)}
-            disabled={!availableDays.includes(day)}
-          >
-            {day}
-          </button>
-        ))}
+    <div>
+      <NavBar />
+      <div className="workout-container">
+        <h1>Workout Split</h1>
+        <div className="day-nav">
+          {DAYS_OF_WEEK.map((day) => (
+            <button
+              key={day}
+              className={`day-btn ${day === selectedDay ? "selected" : ""}`}
+              onClick={() => setSelectedDay(day)}
+              disabled={!availableDays.includes(day)}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
+        <div className="workout-card">{renderContent()}</div>
       </div>
-      <div className="workout-card">{renderContent()}</div>
     </div>
   );
 };

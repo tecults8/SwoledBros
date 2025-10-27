@@ -1,184 +1,184 @@
-/* General Layout */
+/* ===== General Layout ===== */
 .dashboard {
-  font-family: Arial, sans-serif;
-  background-color: #ffffff;
-  min-height: 100vh;
-  overflow-x: hidden;
-  padding-bottom: 50px;
+    font-family: "Poppins", Arial, sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-.dashboard-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
-/* Header */
-.dashboard-header h1 {
-  font-size: 48px;
-  font-weight: bold;
-  color: #1a1a1a;
-  margin-bottom: 40px;
+/* ===== Title ===== */
+.dashboard-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 40px;
 }
 
-.dashboard-header .highlight {
-  color: #ff3737;
-  margin-left: 10px;
+.highlight {
+    color: #ff3737;
+    margin-left: 10px;
 }
 
-/* Grids */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
+/* ===== Top Section ===== */
+.top-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    align-items: start;
+    margin-bottom: 50px;
 }
 
-.top-grid {
-  margin-bottom: 60px; /* spacing between top and bottom sections */
+.top-section .red-card {
+    grid-row: span 2;
 }
 
-.bottom-grid {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-}
-
-/* Cards */
+/* ===== Cards ===== */
 .card {
-  border-radius: 20px;
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
 }
 
 .red-card {
-  background-color: #ff3737;
-  color: #ffffff;
+    background-color: #ff3737;
+    color: #ffffff;
 }
 
 .white-card {
-  background-color: #ffffff;
-  color: #1a1a1a;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    color: #1a1a1a;
 }
 
+/* ===== Text Styles ===== */
 .card-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 10px;
 }
 
 .card-text {
-  font-size: 18px;
+    font-size: 18px;
 }
 
 .weight {
-  font-size: 36px;
-  font-weight: bold;
+    font-size: 32px;
+    font-weight: 700;
 }
 
-/* Links Section */
-.link-group {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ===== Bottom Section ===== */
+.bottom-section {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    align-items: stretch;
 }
 
-.link-card {
-  text-decoration: none;
-  background-color: #ffffff;
-  color: #1a1a1a;
-  padding: 30px;
-  border-radius: 20px;
-  font-size: 22px;
-  font-weight: 600;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* ===== Progress Checker ===== */
+.progress-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.link-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.25);
-}
-
-/* Progress Checker */
 .card-subtitle {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .card-desc {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
 }
 
 .graph-placeholder {
-  width: 100%;
-  height: 100px;
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  color: #888;
+    width: 100%;
+    height: 150px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Buttons */
+.graph-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* ===== Button ===== */
 .btn-dark {
-  background-color: #1a1a1a;
-  color: #ffffff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s ease;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: start;
 }
 
 .btn-dark:hover {
-  background-color: #333;
+    background-color: #333;
 }
 
-/* Step Counter */
+/* ===== Step Counter ===== */
 .step-card {
-  align-items: center;
+    text-align: center;
 }
 
 .steps-number {
-  font-size: 72px;
-  font-weight: bold;
-  line-height: 1;
-  margin: 0;
+    font-size: 72px;
+    font-weight: 700;
+    margin: 10px 0 5px;
 }
 
 .steps-label {
-  font-size: 24px;
-  margin: 0;
+    font-size: 22px;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .dashboard-header h1 {
-    font-size: 32px;
-  }
+/* ===== Hide Scrollbar (but allow scroll) ===== */
+html,
+body {
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
 
-  .link-card {
-    font-size: 18px;
-    padding: 20px;
-  }
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
 
-  .btn-dark {
-    width: 100%;
-    text-align: center;
-  }
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .top-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-  .graph-placeholder {
-    height: 80px;
-  }
+    .bottom-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard-title {
+        font-size: 32px;
+    }
 }
