@@ -10,7 +10,6 @@ const WorkoutSplitComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✅ Step 1: Get userId & token from localStorage on mount
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     const storedToken = localStorage.getItem("jwtToken");
@@ -24,7 +23,6 @@ const WorkoutSplitComponent = () => {
     }
   }, []);
 
-  // ✅ Step 2: Fetch user workout data when userId is set
   useEffect(() => {
     if (!userId) return;
 
@@ -64,7 +62,6 @@ const WorkoutSplitComponent = () => {
     fetchWorkout();
   }, [userId]);
 
-  // ✅ Derived data
   const availableDays = useMemo(
     () => Object.keys(workoutSplit),
     [workoutSplit]
@@ -74,7 +71,6 @@ const WorkoutSplitComponent = () => {
     [workoutSplit, selectedDay]
   );
 
-  // ✅ Split columns
   const half = Math.ceil(currentWorkout.length / 2);
   const col1 = currentWorkout.slice(0, half);
   const col2 = currentWorkout.slice(half);

@@ -59,6 +59,22 @@
   },
   {
     "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "GetMembership",
+    "RelativePath": "api/Admin/Membership/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
     "Method": "UpdateDietPlan",
     "RelativePath": "api/Admin/UpdateDietPlan/{userId}",
     "HttpMethod": "PUT",
@@ -73,6 +89,27 @@
       {
         "Name": "model",
         "Type": "SwoledBrosBE.Controllers.AdminController\u002BDietPlanDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SwoledBrosBE.Controllers.AdminController",
+    "Method": "UpdateMembership",
+    "RelativePath": "api/Admin/UpdateMembership/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "model",
+        "Type": "SwoledBrosBE.Controllers.AdminController\u002BUpdateMembershipDto",
         "IsRequired": true
       }
     ],

@@ -23,12 +23,12 @@ namespace SwoledBrosBE.Controllers
         // ---------------- DTOs ----------------
         public class DietPlanDto
         {
-            public List<MealDto> Breakfast { get; set; } = new List<MealDto>();
-            public List<MealDto> Lunch { get; set; } = new List<MealDto>();
-            public List<MealDto> Dinner { get; set; } = new List<MealDto>();
-            public List<MealDto> BrunchSnack { get; set; } = new List<MealDto>();
-            public List<MealDto> EveningSnack { get; set; } = new List<MealDto>();
-            public List<MealDto> PreBedSnack { get; set; } = new List<MealDto>();
+            public List<MealDto> Breakfast { get; set; } = new();
+            public List<MealDto> Lunch { get; set; } = new();
+            public List<MealDto> Dinner { get; set; } = new();
+            public List<MealDto> BrunchSnack { get; set; } = new();
+            public List<MealDto> EveningSnack { get; set; } = new();
+            public List<MealDto> PreBedSnack { get; set; } = new();
         }
 
         public class MealDto
@@ -50,6 +50,12 @@ namespace SwoledBrosBE.Controllers
             public int Reps { get; set; }
         }
 
+        public class UpdateMembershipDto
+        {
+            public DateOnly? MembershipStartDate { get; set; }
+            public DateOnly? MembershipEndDate { get; set; }
+        }
+
         // ---------------- GET: All users with plans ----------------
         [HttpGet("UsersWithPlans")]
         public async Task<IActionResult> GetUsersWithPlans()
@@ -62,6 +68,8 @@ namespace SwoledBrosBE.Controllers
                     u.Id,
                     u.Username,
                     u.Email,
+                    u.MembershipStartDate,
+                    u.MembershipEndDate,
                     DietPlans = u.DietPlans.Select(dp => new { dp.Id, dp.Date }),
                     WorkoutSplits = u.WorkoutSplits.Select(ws => new { ws.Id, ws.Day })
                 })
@@ -77,13 +85,16 @@ namespace SwoledBrosBE.Controllers
             if (model == null)
                 return BadRequest(new { message = "Diet plan data is required." });
 
-            var user = await _context.Users.Include(u => u.DietPlans).FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _context.Users
+                .Include(u => u.DietPlans)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
             if (user == null) return NotFound(new { message = "User not found." });
 
             var dietPlan = new DietPlan
             {
                 UserId = user.Id,
-                Date = DateTime.UtcNow,
+                Date = DateTime.UtcNow.Date,
                 Breakfast = new Meal { Items = model.Breakfast.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
                 Lunch = new Meal { Items = model.Lunch.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
                 Dinner = new Meal { Items = model.Dinner.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
@@ -97,7 +108,7 @@ namespace SwoledBrosBE.Controllers
             return Ok(new { message = "Diet plan added successfully." });
         }
 
-        // ---------------- PUT: Update Diet Plan (partial update) ----------------
+        // ---------------- PUT: Update Diet Plan ----------------
         [HttpPut("UpdateDietPlan/{userId}")]
         public async Task<IActionResult> UpdateDietPlan(int userId, [FromBody] DietPlanDto model)
         {
@@ -105,18 +116,12 @@ namespace SwoledBrosBE.Controllers
                 return BadRequest(new { message = "Diet plan data is required." });
 
             var user = await _context.Users
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.Breakfast)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.Lunch)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.Dinner)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.BrunchSnack)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.EveningSnack)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.PreBedSnack)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.Breakfast).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.Lunch).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.Dinner).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.BrunchSnack).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.EveningSnack).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.PreBedSnack).ThenInclude(m => m.Items)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null) return NotFound(new { message = "User not found" });
@@ -148,10 +153,7 @@ namespace SwoledBrosBE.Controllers
             if (model == null || string.IsNullOrEmpty(model.Day))
                 return BadRequest(new { message = "Invalid workout data" });
 
-            var user = await _context.Users
-                .Include(u => u.WorkoutSplits)
-                .FirstOrDefaultAsync(u => u.Id == userId);
-
+            var user = await _context.Users.Include(u => u.WorkoutSplits).FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
@@ -169,7 +171,6 @@ namespace SwoledBrosBE.Controllers
 
             _context.WorkoutSplits.Add(workout);
             await _context.SaveChangesAsync();
-
             return Ok(new { message = "Workout split added successfully." });
         }
 
@@ -186,7 +187,7 @@ namespace SwoledBrosBE.Controllers
                 return NotFound(new { message = "User not found" });
 
             var result = user.WorkoutSplits
-                .GroupBy(ws => ws.Day.ToString().Substring(0, 2))
+                .GroupBy(ws => ws.Day.Value.ToString().Substring(0, 2))
                 .ToDictionary(
                     g => g.Key,
                     g => g.SelectMany(ws => ws.Exercises.Select(e => new
@@ -204,18 +205,12 @@ namespace SwoledBrosBE.Controllers
         public async Task<IActionResult> GetUserDietPlan(int userId)
         {
             var user = await _context.Users
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.Breakfast).ThenInclude(m => m.Items)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.Lunch).ThenInclude(m => m.Items)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.Dinner).ThenInclude(m => m.Items)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.BrunchSnack).ThenInclude(m => m.Items)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.EveningSnack).ThenInclude(m => m.Items)
-                .Include(u => u.DietPlans)
-                    .ThenInclude(dp => dp.PreBedSnack).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.Breakfast).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.Lunch).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.Dinner).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.BrunchSnack).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.EveningSnack).ThenInclude(m => m.Items)
+                .Include(u => u.DietPlans).ThenInclude(dp => dp.PreBedSnack).ThenInclude(m => m.Items)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
@@ -240,6 +235,54 @@ namespace SwoledBrosBE.Controllers
             };
 
             return Ok(result);
+        }
+
+        // ---------------- PUT: Update Membership ----------------
+        [HttpPut("UpdateMembership/{userId}")]
+        public async Task<IActionResult> UpdateMembership(int userId, [FromBody] UpdateMembershipDto model)
+        {
+            if (model == null)
+                return BadRequest(new { message = "Invalid membership data" });
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            if (model.MembershipStartDate.HasValue)
+                user.MembershipStartDate = model.MembershipStartDate;
+
+            if (model.MembershipEndDate.HasValue)
+                user.MembershipEndDate = model.MembershipEndDate;
+
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Membership details updated successfully" });
+        }
+
+        // ---------------- GET: Get Membership Status ----------------
+        [HttpGet("Membership/{userId}")]
+        public async Task<IActionResult> GetMembership(int userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            bool? isActive = null;
+
+            if (user.MembershipStartDate.HasValue && user.MembershipEndDate.HasValue)
+            {
+                var today = DateOnly.FromDateTime(DateTime.UtcNow);
+                isActive = user.MembershipStartDate <= today && user.MembershipEndDate >= today;
+            }
+
+            return Ok(new
+            {
+                user.Id,
+                user.Username,
+                user.Email,
+                user.MembershipStartDate,
+                user.MembershipEndDate,
+                IsActive = isActive
+            });
         }
     }
 }

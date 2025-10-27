@@ -1,27 +1,201 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-function AdminDashboard() {
+function SmallToast({ message, type = "info", onClose }) {
+  useEffect(() => {
+    if (!message) return;
+    const t = setTimeout(onClose, 3000);
+    return () => clearTimeout(t);
+  }, [message, onClose]);
+
+  if (!message) return null;
+
+  const bg =
+    type === "success" ? "#16a34a" : type === "error" ? "#dc3545" : "#0b74de";
+
+  const toastStyle = {
+    position: "fixed",
+    right: 18,
+    bottom: 18,
+    padding: "12px 16px",
+    borderRadius: 10,
+    color: "#fff",
+    background: bg,
+    boxShadow: "0 8px 24px rgba(11,20,30,0.12)",
+    cursor: "pointer",
+    zIndex: 9999,
+    fontWeight: 600,
+  };
+
+  return (
+    <div role="status" aria-live="polite" style={toastStyle} onClick={onClose}>
+      {message}
+    </div>
+  );
+}
+
+export default function AdminDashboardCompactInline() {
+  const styles = {
+    root: {
+      width: "100%",
+      maxWidth: 900,
+      margin: "20px auto",
+      padding: 20,
+      boxSizing: "border-box",
+      fontFamily:
+        "Inter, Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial",
+      color: "#0b1220",
+    },
+    headerRow: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 12,
+      marginBottom: 18,
+    },
+    title: {
+      fontSize: 22,
+      margin: 0,
+      fontWeight: 700,
+    },
+    userRow: {
+      display: "flex",
+      gap: 12,
+      alignItems: "center",
+      flexWrap: "wrap",
+    },
+    label: { fontSize: 14, color: "#374151", fontWeight: 600 },
+    select: {
+      minWidth: 220,
+      padding: "10px 12px",
+      borderRadius: 8,
+      border: "1px solid #e6e6e6",
+      background: "#fff",
+    },
+
+    tabsRow: { display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" },
+    tabBtn: (active) => ({
+      padding: "8px 14px",
+      borderRadius: 8,
+      cursor: "pointer",
+      background: active ? "#0b74de" : "#f3f4f6",
+      color: active ? "#fff" : "#111827",
+      fontWeight: active ? 700 : 600,
+      border: "1px solid",
+      borderColor: active ? "#0b74de" : "#e6e6e6",
+    }),
+
+    section: {
+      border: "1px solid #e6e6e6",
+      borderRadius: 8,
+      padding: 18,
+      background: "#fff",
+      marginBottom: 16,
+    },
+
+    formRow: {
+      display: "flex",
+      gap: 12,
+      alignItems: "center",
+      marginBottom: 14,
+      flexWrap: "wrap",
+    },
+    formCol: { flex: 1, minWidth: 160 },
+    input: {
+      width: "100%",
+      padding: "12px 14px",
+      borderRadius: 8,
+      border: "1px solid #e6e6e6",
+      fontSize: 14,
+      boxSizing: "border-box",
+      background: "#fff",
+    },
+    smallInput: { width: "100%", padding: "10px 12px", borderRadius: 8 },
+    tableLike: { display: "flex", flexDirection: "column", gap: 12 },
+
+    rowLike: {
+      display: "flex",
+      gap: 12,
+      alignItems: "center",
+      width: "100%",
+      flexWrap: "wrap",
+    },
+    foodInput: { flex: 1, minWidth: 140 },
+    qtyInput: { width: 110, minWidth: 110 },
+
+    actionRowCentered: {
+      display: "flex",
+      justifyContent: "center",
+      marginTop: 12,
+    },
+
+    buttonPrimary: {
+      padding: "10px 18px",
+      borderRadius: 8,
+      background: "#0b74de",
+      color: "#fff",
+      border: "none",
+      cursor: "pointer",
+      fontWeight: 700,
+      fontSize: 14,
+    },
+    buttonGhost: {
+      padding: "10px 14px",
+      borderRadius: 8,
+      background: "#fff",
+      color: "#111827",
+      border: "1px solid #e6e6e6",
+      cursor: "pointer",
+    },
+    smallIconBtn: {
+      padding: "8px 10px",
+      borderRadius: 8,
+      border: "1px solid #e6e6e6",
+      background: "#fff",
+      cursor: "pointer",
+    },
+
+    muted: { color: "#6b7280", fontSize: 13 },
+    fieldError: {
+      color: "#dc3545",
+      marginTop: 8,
+      fontWeight: 600,
+      fontSize: 13,
+    },
+  };
+
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
+  const [activeTab, setActiveTab] = useState("membership");
 
-  // Diet Plan State: each meal is an array
-  const [dietPlan, setDietPlan] = useState({
+  // Diet
+  const initialDietPlan = {
     breakfast: [{ foodName: "", quantity: 0 }],
     lunch: [{ foodName: "", quantity: 0 }],
     dinner: [{ foodName: "", quantity: 0 }],
     brunchSnack: [{ foodName: "", quantity: 0 }],
     eveningSnack: [{ foodName: "", quantity: 0 }],
     preBedSnack: [{ foodName: "", quantity: 0 }],
-  });
+  };
+  const [dietPlan, setDietPlan] = useState(initialDietPlan);
+  const [activeMeal, setActiveMeal] = useState("breakfast");
 
-  // Workout Split State
-  const [workoutSplit, setWorkoutSplit] = useState({
+  // Workout
+  const initialWorkoutSplit = {
     day: "",
     exercises: [{ exerciseName: "", sets: 0, reps: 0 }],
-  });
+  };
+  const [workoutSplit, setWorkoutSplit] = useState(initialWorkoutSplit);
 
-  // Load Users
+  // Membership
+  const initialMembership = { startDate: "", endDate: "" };
+  const [membership, setMembership] = useState(initialMembership);
+  const [loadingMembership, setLoadingMembership] = useState(false);
+  const [membershipError, setMembershipError] = useState("");
+
+  // Toast
+  const [toast, setToast] = useState({ message: "", type: "info" });
+  const showToast = (message, type = "info") => setToast({ message, type });
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -35,56 +209,124 @@ function AdminDashboard() {
         );
         setUsers(Array.isArray(res.data) ? res.data : [res.data]);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load users", err);
+        showToast("Failed to load users", "error");
       }
     };
     fetchUsers();
   }, []);
 
-  // Diet Input Handler
-  const handleDietInputChange = (meal, index, field, value) => {
+  useEffect(() => {
+    if (!selectedUser) {
+      setMembership(initialMembership);
+      setMembershipError("");
+      return;
+    }
+
+    const fetchMembership = async () => {
+      setLoadingMembership(true);
+      setMembershipError("");
+      try {
+        const res = await axios.get(
+          `https://localhost:7239/api/admin/Membership/${selectedUser}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        const user = res.data || {};
+        const start = user?.membershipStartDate
+          ? user.membershipStartDate.split("T")[0]
+          : "";
+        const end = user?.membershipEndDate
+          ? user.membershipEndDate.split("T")[0]
+          : "";
+        setMembership({ startDate: start, endDate: end });
+      } catch (err) {
+        console.warn("Failed to fetch membership", err);
+        showToast("Failed to load membership", "error");
+        setMembership(initialMembership);
+      } finally {
+        setLoadingMembership(false);
+      }
+    };
+
+    fetchMembership();
+  }, [selectedUser]);
+
+  const handleDietInputChange = (meal, idx, field, value) => {
     setDietPlan((prev) => {
-      const updated = [...prev[meal]];
-      updated[index][field] =
-        field === "quantity" ? parseInt(value) || 0 : value;
+      const updated = prev[meal].map((it, i) =>
+        i === idx
+          ? {
+              ...it,
+              [field]: field === "quantity" ? parseInt(value) || 0 : value,
+            }
+          : it
+      );
       return { ...prev, [meal]: updated };
     });
   };
 
-  const addFoodItem = (meal) => {
+  const addFoodItem = (meal) =>
     setDietPlan((prev) => ({
       ...prev,
       [meal]: [...prev[meal], { foodName: "", quantity: 0 }],
     }));
-  };
 
-  const removeFoodItem = (meal, index) => {
+  const removeFoodItem = (meal, idx) =>
     setDietPlan((prev) => ({
       ...prev,
-      [meal]: prev[meal].filter((_, i) => i !== index),
+      [meal]: prev[meal].filter((_, i) => i !== idx),
+    }));
+
+  const handleWorkoutInputChange = (idx, field, value) => {
+    setWorkoutSplit((prev) => ({
+      ...prev,
+      exercises: prev.exercises.map((ex, i) =>
+        i === idx
+          ? {
+              ...ex,
+              [field]:
+                field === "sets" || field === "reps"
+                  ? parseInt(value) || 0
+                  : value,
+            }
+          : ex
+      ),
     }));
   };
 
-  // Workout Input Handler
-  const handleWorkoutInputChange = (index, field, value) => {
-    setWorkoutSplit((prev) => {
-      const updated = [...prev.exercises];
-      updated[index][field] =
-        field === "sets" || field === "reps" ? parseInt(value) || 0 : value;
-      return { ...prev, exercises: updated };
-    });
-  };
-
-  const addExercise = () => {
+  const addExercise = () =>
     setWorkoutSplit((prev) => ({
       ...prev,
       exercises: [...prev.exercises, { exerciseName: "", sets: 0, reps: 0 }],
     }));
+
+  const removeExercise = (idx) =>
+    setWorkoutSplit((prev) => ({
+      ...prev,
+      exercises: prev.exercises.filter((_, i) => i !== idx),
+    }));
+
+  const validateMembership = ({ startDate, endDate }) => {
+    if (!startDate && !endDate) return { valid: true, message: "" };
+    if (!startDate || !endDate)
+      return {
+        valid: false,
+        message: "Both start and end dates are required.",
+      };
+    if (endDate < startDate)
+      return { valid: false, message: "End date must be after start date." };
+    return { valid: true, message: "" };
   };
 
-  // Save Diet Plan (PUT for update)
   const handleDietSubmit = async () => {
-    if (!selectedUser) return alert("Select a user first!");
+    if (!selectedUser) {
+      showToast("Select a user first", "error");
+      return;
+    }
     try {
       await axios.put(
         `https://localhost:7239/api/admin/UpdateDietPlan/${selectedUser}`,
@@ -93,16 +335,19 @@ function AdminDashboard() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      alert("✅ Diet Plan Updated!");
+      showToast("Diet plan updated", "success");
+      setDietPlan(initialDietPlan);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to update diet plan");
+      showToast("Failed to update diet plan", "error");
     }
   };
 
-  // Save Workout Plan
   const handleWorkoutSubmit = async () => {
-    if (!selectedUser) return alert("Select a user first!");
+    if (!selectedUser) {
+      showToast("Select a user first", "error");
+      return;
+    }
     try {
       await axios.post(
         `https://localhost:7239/api/admin/AddWorkoutSplit/${selectedUser}`,
@@ -111,330 +356,423 @@ function AdminDashboard() {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      alert("✅ Workout Split Added!");
+      showToast("Workout split added", "success");
+      setWorkoutSplit(initialWorkoutSplit);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to add workout split");
+      showToast("Failed to add workout split", "error");
     }
   };
 
+  const handleMembershipSubmit = async () => {
+    if (!selectedUser) {
+      showToast("Select a user first", "error");
+      return;
+    }
+    const { valid, message } = validateMembership(membership);
+    if (!valid) {
+      setMembershipError(message);
+      return;
+    }
+    try {
+      await axios.put(
+        `https://localhost:7239/api/admin/UpdateMembership/${selectedUser}`,
+        {
+          membershipStartDate: membership.startDate || null,
+          membershipEndDate: membership.endDate || null,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      showToast("Membership updated", "success");
+      setMembership(initialMembership);
+      setMembershipError("");
+    } catch (err) {
+      console.error("Failed to update membership", err);
+      showToast("Failed to update membership", "error");
+    }
+  };
+
+  // Display name map for meals
+  const mealDisplayName = (m) =>
+    ({
+      breakfast: "Breakfast",
+      lunch: "Lunch",
+      dinner: "Dinner",
+      brunchSnack: "Brunch / Snack",
+      eveningSnack: "Evening Snack",
+      preBedSnack: "Pre-Bed Snack",
+    }[m] || m);
+
   return (
-    <div
-      style={{
-        maxWidth: "1100px",
-        margin: "auto",
-        padding: "30px",
-        fontFamily: "Poppins, sans-serif",
-      }}
-    >
-      <h1 style={{ textAlign: "center", marginBottom: "30px" }}>
-        Admin Dashboard
-      </h1>
+    <div style={styles.root}>
+      {/* Header */}
+      <div style={styles.headerRow}>
+        <h1 style={styles.title}>Admin Dashboard</h1>
 
-      {/* User Selection */}
-      <div
-        style={{
-          backgroundColor: "#f9f9f9",
-          padding: "20px",
-          borderRadius: "10px",
-          marginBottom: "30px",
-        }}
-      >
-        <label
-          htmlFor="userSelect"
-          style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
-        >
-          Select User:
-        </label>
-        <select
-          id="userSelect"
-          value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "6px",
-            border: "1px solid #ccc",
-          }}
-        >
-          <option value="">-- Select a user --</option>
-          {users.map((u) => (
-            <option key={u.id} value={u.id}>
-              {u.username}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Diet & Workout */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "25px",
-          alignItems: "start",
-        }}
-      >
-        {/* Diet Plan */}
-        <div
-          style={{
-            backgroundColor: "#fffaf0",
-            padding: "20px",
-            borderRadius: "10px",
-          }}
-        >
-          <h2 style={{ marginBottom: "20px" }}>🍽️ Add / Update Diet Plan</h2>
-
-          {[
-            "breakfast",
-            "lunch",
-            "dinner",
-            "brunchSnack",
-            "eveningSnack",
-            "preBedSnack",
-          ].map((meal) => (
-            <div
-              key={meal}
-              style={{
-                backgroundColor: "#fff",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "15px",
-                marginBottom: "15px",
-              }}
-            >
-              <h4 style={{ textTransform: "capitalize", color: "#ff8c00" }}>
-                {meal}
-              </h4>
-
-              {dietPlan[meal].map((item, idx) => (
-                <div
-                  key={idx}
-                  style={{ display: "flex", gap: "10px", marginBottom: "10px" }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Food Name"
-                    value={item.foodName}
-                    onChange={(e) =>
-                      handleDietInputChange(
-                        meal,
-                        idx,
-                        "foodName",
-                        e.target.value
-                      )
-                    }
-                    style={{
-                      flex: 2,
-                      padding: "8px",
-                      borderRadius: "6px",
-                      border: "1px solid #ccc",
-                    }}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Quantity"
-                    value={item.quantity}
-                    onChange={(e) =>
-                      handleDietInputChange(
-                        meal,
-                        idx,
-                        "quantity",
-                        e.target.value
-                      )
-                    }
-                    style={{
-                      flex: 1,
-                      padding: "8px",
-                      borderRadius: "6px",
-                      border: "1px solid #ccc",
-                    }}
-                  />
-                  {dietPlan[meal].length > 1 && (
-                    <button
-                      onClick={() => removeFoodItem(meal, idx)}
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "#dc3545",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "6px",
-                      }}
-                    >
-                      ❌
-                    </button>
-                  )}
-                </div>
-              ))}
-
-              <button
-                onClick={() => addFoodItem(meal)}
-                style={{
-                  padding: "8px 12px",
-                  backgroundColor: "#28a745",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  marginTop: "5px",
-                }}
-              >
-                ➕ Add Food
-              </button>
-            </div>
-          ))}
-
-          <button
-            onClick={handleDietSubmit}
-            style={{
-              backgroundColor: "#ff8c00",
-              color: "#fff",
-              padding: "12px 20px",
-              border: "none",
-              borderRadius: "6px",
-              width: "100%",
-              fontWeight: "bold",
-            }}
-          >
-            Save Diet Plan
-          </button>
-        </div>
-
-        {/* Workout */}
-        <div
-          style={{
-            backgroundColor: "#f0f8ff",
-            padding: "20px",
-            borderRadius: "10px",
-          }}
-        >
-          <h2 style={{ marginBottom: "20px" }}>🏋️ Add Workout Split</h2>
-          <div style={{ marginBottom: "15px" }}>
-            <label style={{ fontWeight: "600" }}>Day:</label>
+        <div style={styles.userRow}>
+          <div>
+            <div style={styles.label}>Select User</div>
             <select
-              value={workoutSplit.day}
-              onChange={(e) =>
-                setWorkoutSplit((prev) => ({ ...prev, day: e.target.value }))
-              }
-              style={{
-                display: "block",
-                width: "100%",
-                padding: "8px",
-                borderRadius: "6px",
-                border: "1px solid #ccc",
-                marginTop: "5px",
+              style={styles.select}
+              value={selectedUser}
+              onChange={(e) => {
+                setSelectedUser(e.target.value);
               }}
             >
-              <option value="">-- Select Day --</option>
-              {[
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-              ].map((day) => (
-                <option key={day} value={day}>
-                  {day}
+              <option value="">-- Select User --</option>
+              {users.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.username}
                 </option>
               ))}
             </select>
           </div>
 
-          {workoutSplit.exercises.map((ex, i) => (
-            <div
-              key={i}
-              style={{
-                backgroundColor: "#fff",
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "15px",
-                marginBottom: "10px",
-              }}
-            >
-              <h4 style={{ marginBottom: "10px", color: "#007bff" }}>
-                Exercise {i + 1}
-              </h4>
-              <input
-                type="text"
-                placeholder="Exercise Name"
-                value={ex.exerciseName}
-                onChange={(e) =>
-                  handleWorkoutInputChange(i, "exerciseName", e.target.value)
-                }
-                style={{
-                  width: "100%",
-                  padding: "8px",
-                  borderRadius: "6px",
-                  border: "1px solid #ccc",
-                  marginBottom: "5px",
-                }}
-              />
-              <div style={{ display: "flex", gap: "10px" }}>
+          <div
+            style={{
+              marginLeft: "auto",
+              display: "flex",
+              gap: 8,
+              alignItems: "center",
+            }}
+          >
+            <div style={styles.muted}>Selected: </div>
+            <div style={{ fontWeight: 700 }}>
+              {users.find((x) => String(x.id) === String(selectedUser))
+                ?.username || "—"}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={styles.tabsRow}>
+        <div
+          style={styles.tabBtn(activeTab === "membership")}
+          onClick={() => setActiveTab("membership")}
+        >
+          📅 Membership
+        </div>
+        <div
+          style={styles.tabBtn(activeTab === "diet")}
+          onClick={() => setActiveTab("diet")}
+        >
+          🍽 Diet Plan
+        </div>
+        <div
+          style={styles.tabBtn(activeTab === "workout")}
+          onClick={() => setActiveTab("workout")}
+        >
+          🏋️ Workout Split
+        </div>
+      </div>
+
+      {/* Tab content */}
+      <div style={styles.section}>
+        {activeTab === "membership" && (
+          <div>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div style={styles.formCol}>
+                <div style={styles.label}>Start Date</div>
                 <input
-                  type="number"
-                  placeholder="Sets"
-                  value={ex.sets}
+                  type="date"
+                  style={styles.input}
+                  value={membership.startDate}
                   onChange={(e) =>
-                    handleWorkoutInputChange(i, "sets", e.target.value)
+                    setMembership((p) => ({ ...p, startDate: e.target.value }))
                   }
-                  style={{
-                    flex: 1,
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #ccc",
-                  }}
                 />
+              </div>
+
+              <div style={styles.formCol}>
+                <div style={styles.label}>End Date</div>
                 <input
-                  type="number"
-                  placeholder="Reps"
-                  value={ex.reps}
+                  type="date"
+                  style={styles.input}
+                  value={membership.endDate}
                   onChange={(e) =>
-                    handleWorkoutInputChange(i, "reps", e.target.value)
+                    setMembership((p) => ({ ...p, endDate: e.target.value }))
                   }
-                  style={{
-                    flex: 1,
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid #ccc",
-                  }}
                 />
               </div>
             </div>
-          ))}
 
-          <button
-            onClick={addExercise}
-            style={{
-              backgroundColor: "#28a745",
-              color: "#fff",
-              padding: "10px 15px",
-              border: "none",
-              borderRadius: "6px",
-              marginTop: "10px",
-              marginRight: "10px",
-            }}
-          >
-            ➕ Add Exercise
-          </button>
-          <button
-            onClick={handleWorkoutSubmit}
-            style={{
-              backgroundColor: "#007bff",
-              color: "#fff",
-              padding: "12px 20px",
-              border: "none",
-              borderRadius: "6px",
-              width: "100%",
-              marginTop: "10px",
-            }}
-          >
-            Save Workout Plan
-          </button>
-        </div>
+            {membershipError && (
+              <div style={styles.fieldError}>{membershipError}</div>
+            )}
+            {loadingMembership && (
+              <div style={{ marginTop: 8, ...styles.muted }}>
+                Loading membership…
+              </div>
+            )}
+
+            <div style={styles.actionRowCentered}>
+              <button
+                style={styles.buttonPrimary}
+                onClick={handleMembershipSubmit}
+                disabled={loadingMembership}
+              >
+                Save Membership
+              </button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "diet" && (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
+                marginBottom: 14,
+                flexWrap: "wrap",
+              }}
+            >
+              <div style={{ minWidth: 180 }}>
+                <div style={styles.label}>Meal</div>
+                <select
+                  style={styles.input}
+                  value={activeMeal}
+                  onChange={(e) => setActiveMeal(e.target.value)}
+                >
+                  {Object.keys(dietPlan).map((m) => (
+                    <option key={m} value={m}>
+                      {mealDisplayName(m)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+                <button
+                  style={styles.buttonGhost}
+                  onClick={() => {
+                    // quick reset visible meal
+                    setDietPlan((p) => ({
+                      ...p,
+                      [activeMeal]: [{ foodName: "", quantity: 0 }],
+                    }));
+                    showToast(
+                      `${mealDisplayName(activeMeal)} cleared locally`,
+                      "info"
+                    );
+                  }}
+                >
+                  Clear Meal
+                </button>
+              </div>
+            </div>
+
+            <div style={styles.tableLike}>
+              {/* header row */}
+              <div
+                style={{ ...styles.rowLike, color: "#6b7280", fontWeight: 700 }}
+              >
+                <div style={{ flex: 1 }}>Food</div>
+                <div style={{ width: 110 }}>Quantity</div>
+                <div style={{ width: 80 }} />
+              </div>
+
+              {/* items */}
+              {dietPlan[activeMeal].map((item, idx) => (
+                <div key={idx} style={styles.rowLike}>
+                  <input
+                    placeholder="e.g. Eggs"
+                    value={item.foodName}
+                    onChange={(e) =>
+                      handleDietInputChange(
+                        activeMeal,
+                        idx,
+                        "foodName",
+                        e.target.value
+                      )
+                    }
+                    style={{ ...styles.input, ...styles.foodInput }}
+                  />
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) =>
+                      handleDietInputChange(
+                        activeMeal,
+                        idx,
+                        "quantity",
+                        e.target.value
+                      )
+                    }
+                    style={{ ...styles.input, ...styles.qtyInput }}
+                  />
+                  <div
+                    style={{
+                      width: 80,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <button
+                      aria-label="remove"
+                      title="Remove"
+                      style={styles.smallIconBtn}
+                      onClick={() => removeFoodItem(activeMeal, idx)}
+                      disabled={dietPlan[activeMeal].length === 1}
+                    >
+                      ✖
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                  marginTop: 6,
+                }}
+              >
+                <button
+                  style={styles.buttonGhost}
+                  onClick={() => addFoodItem(activeMeal)}
+                >
+                  + Add Row
+                </button>
+                <div style={styles.muted}>
+                  Add foods for {mealDisplayName(activeMeal)}
+                </div>
+              </div>
+
+              <div style={styles.actionRowCentered}>
+                <button style={styles.buttonPrimary} onClick={handleDietSubmit}>
+                  Save Meal
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "workout" && (
+          <div>
+            <div
+              style={{
+                display: "flex",
+                gap: 12,
+                alignItems: "center",
+                flexWrap: "wrap",
+                marginBottom: 14,
+              }}
+            >
+              <div style={{ minWidth: 180 }}>
+                <div style={styles.label}>Day</div>
+                <select
+                  style={styles.input}
+                  value={workoutSplit.day}
+                  onChange={(e) =>
+                    setWorkoutSplit((p) => ({ ...p, day: e.target.value }))
+                  }
+                >
+                  <option value="">-- Select Day --</option>
+                  {[
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday",
+                  ].map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+                <button style={styles.buttonGhost} onClick={addExercise}>
+                  + Exercise
+                </button>
+              </div>
+            </div>
+
+            <div style={styles.tableLike}>
+              {/* header */}
+              <div
+                style={{ ...styles.rowLike, color: "#6b7280", fontWeight: 700 }}
+              >
+                <div style={{ flex: 1 }}>Exercise</div>
+                <div style={{ width: 110 }}>Sets</div>
+                <div style={{ width: 110 }}>Reps</div>
+                <div style={{ width: 80 }} />
+              </div>
+
+              {workoutSplit.exercises.map((ex, idx) => (
+                <div key={idx} style={styles.rowLike}>
+                  <input
+                    placeholder="e.g. Bench Press"
+                    value={ex.exerciseName}
+                    onChange={(e) =>
+                      handleWorkoutInputChange(
+                        idx,
+                        "exerciseName",
+                        e.target.value
+                      )
+                    }
+                    style={{ ...styles.input, flex: 1 }}
+                  />
+                  <input
+                    type="number"
+                    value={ex.sets}
+                    onChange={(e) =>
+                      handleWorkoutInputChange(idx, "sets", e.target.value)
+                    }
+                    style={{ ...styles.input, width: 110 }}
+                  />
+                  <input
+                    type="number"
+                    value={ex.reps}
+                    onChange={(e) =>
+                      handleWorkoutInputChange(idx, "reps", e.target.value)
+                    }
+                    style={{ ...styles.input, width: 110 }}
+                  />
+                  <div
+                    style={{
+                      width: 80,
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <button
+                      style={styles.smallIconBtn}
+                      onClick={() => removeExercise(idx)}
+                      aria-label="remove-ex"
+                    >
+                      ✖
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              <div style={styles.actionRowCentered}>
+                <button
+                  style={styles.buttonPrimary}
+                  onClick={handleWorkoutSubmit}
+                >
+                  Save Workout
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      <SmallToast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast({ message: "" })}
+      />
     </div>
   );
 }
-
-export default AdminDashboard;
