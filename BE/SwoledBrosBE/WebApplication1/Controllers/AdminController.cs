@@ -61,17 +61,10 @@ namespace SwoledBrosBE.Controllers
         public async Task<IActionResult> GetUsersWithPlans()
         {
             var users = await _context.Users
-                .Include(u => u.DietPlans)
-                .Include(u => u.WorkoutSplits)
                 .Select(u => new
                 {
                     u.Id,
-                    u.Username,
-                    u.Email,
-                    u.MembershipStartDate,
-                    u.MembershipEndDate,
-                    DietPlans = u.DietPlans.Select(dp => new { dp.Id, dp.Date }),
-                    WorkoutSplits = u.WorkoutSplits.Select(ws => new { ws.Id, ws.Day })
+                    u.Username
                 })
                 .ToListAsync();
 
@@ -216,22 +209,57 @@ namespace SwoledBrosBE.Controllers
             if (user == null)
                 return NotFound(new { message = "User not found" });
 
-            var latestPlan = user.DietPlans?.OrderByDescending(dp => dp.Date).FirstOrDefault();
-            if (latestPlan == null)
+            if (user.DietPlans == null || !user.DietPlans.Any())
                 return Ok(new { message = "No diet plan found" });
+
+            // Combine all available plans
+            var allBreakfast = user.DietPlans
+                .Where(dp => dp.Breakfast?.Items != null)
+                .SelectMany(dp => dp.Breakfast.Items)
+                .Select(i => new { name = i.FoodName, qty = i.Quantity })
+                .ToList();
+
+            var allLunch = user.DietPlans
+                .Where(dp => dp.Lunch?.Items != null)
+                .SelectMany(dp => dp.Lunch.Items)
+                .Select(i => new { name = i.FoodName, qty = i.Quantity })
+                .ToList();
+
+            var allDinner = user.DietPlans
+                .Where(dp => dp.Dinner?.Items != null)
+                .SelectMany(dp => dp.Dinner.Items)
+                .Select(i => new { name = i.FoodName, qty = i.Quantity })
+                .ToList();
+
+            var allBrunchSnack = user.DietPlans
+                .Where(dp => dp.BrunchSnack?.Items != null)
+                .SelectMany(dp => dp.BrunchSnack.Items)
+                .Select(i => new { name = i.FoodName, qty = i.Quantity })
+                .ToList();
+
+            var allEveningSnack = user.DietPlans
+                .Where(dp => dp.EveningSnack?.Items != null)
+                .SelectMany(dp => dp.EveningSnack.Items)
+                .Select(i => new { name = i.FoodName, qty = i.Quantity })
+                .ToList();
+
+            var allPreBedSnack = user.DietPlans
+                .Where(dp => dp.PreBedSnack?.Items != null)
+                .SelectMany(dp => dp.PreBedSnack.Items)
+                .Select(i => new { name = i.FoodName, qty = i.Quantity })
+                .ToList();
 
             var result = new
             {
                 UserId = user.Id,
                 Username = user.Username,
                 Email = user.Email,
-                Date = latestPlan.Date,
-                Breakfast = latestPlan.Breakfast?.Items?.Select(i => new { name = i.FoodName, qty = i.Quantity }),
-                Lunch = latestPlan.Lunch?.Items?.Select(i => new { name = i.FoodName, qty = i.Quantity }),
-                Dinner = latestPlan.Dinner?.Items?.Select(i => new { name = i.FoodName, qty = i.Quantity }),
-                BrunchSnack = latestPlan.BrunchSnack?.Items?.Select(i => new { name = i.FoodName, qty = i.Quantity }),
-                EveningSnack = latestPlan.EveningSnack?.Items?.Select(i => new { name = i.FoodName, qty = i.Quantity }),
-                PreBedSnack = latestPlan.PreBedSnack?.Items?.Select(i => new { name = i.FoodName, qty = i.Quantity })
+                Breakfast = allBreakfast,
+                Lunch = allLunch,
+                Dinner = allDinner,
+                BrunchSnack = allBrunchSnack,
+                EveningSnack = allEveningSnack,
+                PreBedSnack = allPreBedSnack
             };
 
             return Ok(result);

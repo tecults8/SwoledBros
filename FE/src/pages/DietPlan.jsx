@@ -2,15 +2,21 @@ import React, { useEffect, useState } from "react";
 import "./DietPlan.css";
 import NavBar from "../components/NavBar";
 
-const DietPlan = ({ userId = 1 }) => {
+const DietPlan = () => {
   const [dietPlan, setDietPlan] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // ✅ Get userId from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
 
   useEffect(() => {
     const fetchDietPlan = async () => {
       try {
         setIsLoading(true);
+        if (!userId) throw new Error("User not found in local storage");
+
         const response = await fetch(
           `https://localhost:7239/api/Admin/DietPlan/${userId}`
         );
@@ -44,12 +50,12 @@ const DietPlan = ({ userId = 1 }) => {
       .replace(/^./, (c) => c.toUpperCase());
 
   const mealColors = {
-    breakfast: "#FFD700", // gold
-    lunch: "#90EE90", // light green
-    dinner: "#87CEFA", // light blue
-    brunchSnack: "#FFB6C1", // light pink
-    eveningSnack: "#FFA500", // orange
-    preBedSnack: "#D3D3D3", // light grey
+    breakfast: "#FFD700",
+    lunch: "#90EE90",
+    dinner: "#87CEFA",
+    brunchSnack: "#FFB6C1",
+    eveningSnack: "#FFA500",
+    preBedSnack: "#D3D3D3",
   };
 
   if (isLoading) {

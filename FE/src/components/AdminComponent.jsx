@@ -1,17 +1,5 @@
-// AdminDashboardCompactInline.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-/**
- * Admin Dashboard - Inline styles only
- * - Hybrid layout: maxWidth on desktop, full-width on small screens
- * - Style: S2 (Bordered Sections), Spacious (Z)
- * - Buttons: Centered (B2)
- *
- * Usage:
- *   import AdminDashboardCompactInline from './AdminDashboardCompactInline';
- *   <AdminDashboardCompactInline />
- */
 
 function SmallToast({ message, type = "info", onClose }) {
   useEffect(() => {
@@ -19,12 +7,9 @@ function SmallToast({ message, type = "info", onClose }) {
     const t = setTimeout(onClose, 3000);
     return () => clearTimeout(t);
   }, [message, onClose]);
-
   if (!message) return null;
-
   const bg =
     type === "success" ? "#16a34a" : type === "error" ? "#dc3545" : "#0b74de";
-
   const toastStyle = {
     position: "fixed",
     right: 18,
@@ -38,7 +23,6 @@ function SmallToast({ message, type = "info", onClose }) {
     zIndex: 9999,
     fontWeight: 600,
   };
-
   return (
     <div role="status" aria-live="polite" style={toastStyle} onClick={onClose}>
       {message}
@@ -67,11 +51,7 @@ export default function AdminDashboardCompactInline() {
       gap: 12,
       marginBottom: 18,
     },
-    title: {
-      fontSize: 22,
-      margin: 0,
-      fontWeight: 700,
-    },
+    title: { fontSize: 22, margin: 0, fontWeight: 700 },
     userRow: {
       display: "flex",
       gap: 12,
@@ -86,8 +66,12 @@ export default function AdminDashboardCompactInline() {
       border: "1px solid #e6e6e6",
       background: "#fff",
     },
-
-    tabsRow: { display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" },
+    tabsRow: {
+      display: "flex",
+      gap: 8,
+      marginBottom: 14,
+      flexWrap: "wrap",
+    },
     tabBtn: (active) => ({
       padding: "8px 14px",
       borderRadius: 8,
@@ -98,7 +82,6 @@ export default function AdminDashboardCompactInline() {
       border: "1px solid",
       borderColor: active ? "#0b74de" : "#e6e6e6",
     }),
-
     section: {
       border: "1px solid #e6e6e6",
       borderRadius: 8,
@@ -106,7 +89,6 @@ export default function AdminDashboardCompactInline() {
       background: "#fff",
       marginBottom: 16,
     },
-
     // Spacious form layout:
     formRow: {
       display: "flex",
@@ -126,8 +108,11 @@ export default function AdminDashboardCompactInline() {
       background: "#fff",
     },
     smallInput: { width: "100%", padding: "10px 12px", borderRadius: 8 },
-    tableLike: { display: "flex", flexDirection: "column", gap: 12 },
-
+    tableLike: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 12,
+    },
     rowLike: {
       display: "flex",
       gap: 12,
@@ -137,13 +122,11 @@ export default function AdminDashboardCompactInline() {
     },
     foodInput: { flex: 1, minWidth: 140 },
     qtyInput: { width: 110, minWidth: 110 },
-
     actionRowCentered: {
       display: "flex",
       justifyContent: "center",
       marginTop: 12,
     },
-
     buttonPrimary: {
       padding: "10px 18px",
       borderRadius: 8,
@@ -169,7 +152,6 @@ export default function AdminDashboardCompactInline() {
       background: "#fff",
       cursor: "pointer",
     },
-
     muted: { color: "#6b7280", fontSize: 13 },
     fieldError: {
       color: "#dc3545",
@@ -184,9 +166,9 @@ export default function AdminDashboardCompactInline() {
   // -------------------------
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState("");
-  const [activeTab, setActiveTab] = useState("membership");
+  const [activeTab, setActiveTab] = useState("membership"); // Default tab
 
-  // Diet
+  // Diet State
   const initialDietPlan = {
     breakfast: [{ foodName: "", quantity: 0 }],
     lunch: [{ foodName: "", quantity: 0 }],
@@ -198,20 +180,20 @@ export default function AdminDashboardCompactInline() {
   const [dietPlan, setDietPlan] = useState(initialDietPlan);
   const [activeMeal, setActiveMeal] = useState("breakfast");
 
-  // Workout
+  // Workout State
   const initialWorkoutSplit = {
     day: "",
     exercises: [{ exerciseName: "", sets: 0, reps: 0 }],
   };
   const [workoutSplit, setWorkoutSplit] = useState(initialWorkoutSplit);
 
-  // Membership
+  // Membership State
   const initialMembership = { startDate: "", endDate: "" };
   const [membership, setMembership] = useState(initialMembership);
   const [loadingMembership, setLoadingMembership] = useState(false);
   const [membershipError, setMembershipError] = useState("");
 
-  // Toast
+  // Toast State
   const [toast, setToast] = useState({ message: "", type: "info" });
   const showToast = (message, type = "info") => setToast({ message, type });
 
@@ -242,9 +224,11 @@ export default function AdminDashboardCompactInline() {
     if (!selectedUser) {
       setMembership(initialMembership);
       setMembershipError("");
+      // Reset forms when user changes, or at least reset related state
+      setDietPlan(initialDietPlan);
+      setWorkoutSplit(initialWorkoutSplit);
       return;
     }
-
     const fetchMembership = async () => {
       setLoadingMembership(true);
       setMembershipError("");
@@ -273,7 +257,6 @@ export default function AdminDashboardCompactInline() {
         setLoadingMembership(false);
       }
     };
-
     fetchMembership();
   }, [selectedUser]);
 
@@ -356,32 +339,63 @@ export default function AdminDashboardCompactInline() {
   // -------------------------
   // Submits
   // -------------------------
+
+  // --- MODIFIED: Submit as POST to ADD NEW Diet Plan ---
   const handleDietSubmit = async () => {
     if (!selectedUser) {
       showToast("Select a user first", "error");
       return;
     }
+
+    // Check if all meal lists are empty or contain only empty items before submitting
+    const hasContent = Object.values(dietPlan).some((mealList) =>
+      mealList.some((item) => item.foodName || item.quantity > 0)
+    );
+
+    if (!hasContent) {
+      showToast("Diet plan has no items to save.", "error");
+      return;
+    }
+
     try {
-      await axios.put(
-        `https://localhost:7239/api/admin/UpdateDietPlan/${selectedUser}`,
+      await axios.post(
+        `https://localhost:7239/api/admin/AddDietPlan/${selectedUser}`,
         dietPlan,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
       );
-      showToast("Diet plan updated", "success");
-      setDietPlan(initialDietPlan);
+      showToast("New diet plan added successfully", "success");
+      setDietPlan(initialDietPlan); // Reset form after successful add
+      setActiveMeal("breakfast"); // Reset active meal view
     } catch (err) {
-      console.error(err);
-      showToast("Failed to update diet plan", "error");
+      console.error("Failed to add diet plan", err);
+      showToast(
+        "Failed to add diet plan. Check if a plan already exists for today.",
+        "error"
+      );
     }
   };
+  // ----------------------------------------------------
 
   const handleWorkoutSubmit = async () => {
     if (!selectedUser) {
       showToast("Select a user first", "error");
       return;
     }
+    if (!workoutSplit.day) {
+      showToast("Select a day for the workout split.", "error");
+      return;
+    }
+    // Basic check to ensure at least one exercise is added
+    const hasExercises = workoutSplit.exercises.some(
+      (ex) => ex.exerciseName || ex.sets > 0 || ex.reps > 0
+    );
+    if (!hasExercises) {
+      showToast("Add at least one exercise to the split.", "error");
+      return;
+    }
+
     try {
       await axios.post(
         `https://localhost:7239/api/admin/AddWorkoutSplit/${selectedUser}`,
@@ -391,7 +405,7 @@ export default function AdminDashboardCompactInline() {
         }
       );
       showToast("Workout split added", "success");
-      setWorkoutSplit(initialWorkoutSplit);
+      setWorkoutSplit(initialWorkoutSplit); // Reset form after successful add
     } catch (err) {
       console.error(err);
       showToast("Failed to add workout split", "error");
@@ -408,6 +422,7 @@ export default function AdminDashboardCompactInline() {
       setMembershipError(message);
       return;
     }
+    setMembershipError("");
     try {
       await axios.put(
         `https://localhost:7239/api/admin/UpdateMembership/${selectedUser}`,
@@ -420,8 +435,8 @@ export default function AdminDashboardCompactInline() {
         }
       );
       showToast("Membership updated", "success");
-      setMembership(initialMembership);
-      setMembershipError("");
+      // Don't reset state here, allow user to see the updated dates from re-fetch if needed,
+      // but the next selectedUser useEffect will re-fetch anyway.
     } catch (err) {
       console.error("Failed to update membership", err);
       showToast("Failed to update membership", "error");
@@ -447,7 +462,6 @@ export default function AdminDashboardCompactInline() {
       {/* Header */}
       <div style={styles.headerRow}>
         <h1 style={styles.title}>Admin Dashboard</h1>
-
         <div style={styles.userRow}>
           <div>
             <div style={styles.label}>Select User</div>
@@ -466,7 +480,6 @@ export default function AdminDashboardCompactInline() {
               ))}
             </select>
           </div>
-
           <div
             style={{
               marginLeft: "auto",
@@ -522,7 +535,6 @@ export default function AdminDashboardCompactInline() {
                   }
                 />
               </div>
-
               <div style={styles.formCol}>
                 <div style={styles.label}>End Date</div>
                 <input
@@ -535,16 +547,15 @@ export default function AdminDashboardCompactInline() {
                 />
               </div>
             </div>
-
             {membershipError && (
               <div style={styles.fieldError}>{membershipError}</div>
             )}
             {loadingMembership && (
               <div style={{ marginTop: 8, ...styles.muted }}>
-                Loading membership…
+                {" "}
+                Loading membership…{" "}
               </div>
             )}
-
             <div style={styles.actionRowCentered}>
               <button
                 style={styles.buttonPrimary}
@@ -681,8 +692,9 @@ export default function AdminDashboardCompactInline() {
               </div>
 
               <div style={styles.actionRowCentered}>
+                {/* --- CHANGED: Now uses POST to ADD NEW Plan --- */}
                 <button style={styles.buttonPrimary} onClick={handleDietSubmit}>
-                  Save Meal
+                  Add New Diet Plan
                 </button>
               </div>
             </div>
@@ -725,7 +737,6 @@ export default function AdminDashboardCompactInline() {
                   ))}
                 </select>
               </div>
-
               <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
                 <button style={styles.buttonGhost} onClick={addExercise}>
                   + Exercise
@@ -804,7 +815,6 @@ export default function AdminDashboardCompactInline() {
           </div>
         )}
       </div>
-
       <SmallToast
         message={toast.message}
         type={toast.type}
