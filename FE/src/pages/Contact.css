@@ -3,17 +3,112 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    font-family: Arial, sans-serif;
+    min-height: 90vh;
     background: #fff;
+    font-family: "Helvetica", "Arial", sans-serif;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.contactBody h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 10px;
+}
+
+.contactBody h4 {
+    font-size: 1.2rem;
+    color: #444;
+    margin-bottom: 50px;
+}
+
+.contactButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
 }
 
 .contactButton {
-    color: #FFFFFF;
-    background: #FF3737;
-    padding: 30px;
-    border-radius: 20px;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 75px;
+    background: #ff3737;
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    padding: 18px 40px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+
+.contactButton:hover {
+    background: #e52f2f;
+    transform: scale(1.05);
+}
+
+@media (max-width: 1024px) {
+    .contactBody h1 {
+        font-size: 2rem;
+    }
+
+    .contactBody h4 {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+
+    .contactButton {
+        padding: 16px 32px;
+        font-size: 1rem;
+    }
+
+    .contactButtons {
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contactBody {
+        padding: 40px 10px;
+    }
+
+    .contactBody h1 {
+        font-size: 1.8rem;
+    }
+
+    .contactBody h4 {
+        font-size: 0.95rem;
+    }
+
+    .contactButtons {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contactButton {
+        width: 80%;
+        max-width: 300px;
+        padding: 14px 20px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .contactBody h1 {
+        font-size: 1.6rem;
+    }
+
+    .contactBody h4 {
+        font-size: 0.9rem;
+    }
+
+    .contactButton {
+        width: 90%;
+        padding: 12px 18px;
+        font-size: 0.95rem;
+    }
 }

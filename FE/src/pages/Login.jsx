@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"; // make sure this file exists in the same folder
-
-// ✅ Hashing function stays as you wrote it
+import "./Login.css";
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest("SHA-256", data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return btoa(String.fromCharCode(...hashArray)); // convert bytes to base64
+  return btoa(String.fromCharCode(...hashArray));
 }
 
 const Login = () => {
@@ -36,7 +34,6 @@ const Login = () => {
 
     setLoading(true);
     try {
-      // ✅ Hash password before sending
       const hashed = await hashPassword(password);
 
       const res = await fetch("https://localhost:7239/api/auth/signin", {
@@ -51,16 +48,14 @@ const Login = () => {
       const data = await res.json();
       if (!res.ok) throw new Error("Login failed");
 
-      // ✅ Store user details globally for later access
       localStorage.setItem("jwtToken", data.token);
       localStorage.setItem("userId", data.id);
-      localStorage.setItem("user", JSON.stringify(data)); // optional full object
+      localStorage.setItem("user", JSON.stringify(data));
 
       setSuccess("Login successful!");
       setUsername("");
       setPassword("");
 
-      // ✅ Redirect after short delay to show success
       setTimeout(() => navigate("/Home"), 800);
     } catch (err) {
       setError('Please Sign Up before signing in...');

@@ -51,7 +51,6 @@ function SignUp() {
 
       setSuccess("Signup successful! Redirecting to home...");
 
-      // Redirect to home after signup
       setTimeout(() => navigate("/Home"), 1000);
 
       setName("");
@@ -108,7 +107,7 @@ function SignUp() {
 
         <div className="signup-link">
           <span>Already Have An Account?</span>
-          <a href="/Login">Log In</a>
+          <a href="/">Log In</a>
         </div>
 
         <button type="submit" className="login-btn">

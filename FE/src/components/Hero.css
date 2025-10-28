@@ -2,30 +2,96 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Helvetica;
-}
-button {
-  font-family: "General Sans";
+  font-family: "Helvetica", Arial, sans-serif;
 }
 
 .Hero {
-  height: 85vh;
+  display: flex;
   flex-direction: column;
-  text-align: center;
   justify-content: center;
   align-items: center;
+  height: 85vh;
+  text-align: center;
   padding: 0 2rem;
+  background-color: #fff;
 }
-.HeroCaption {
-  padding: 13rem;
-  margin-bottom: -8rem;
-}
-.lgsbt button {
-  padding: 0.8rem 2rem;
 
+.HeroCaption {
+  font-size: 3rem;
+  line-height: 1.3;
+  font-weight: 700;
+  color: #000;
+  padding: 12rem 4rem 3rem 4rem;
+}
+
+.lgsbt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lgsbt button {
+  padding: 0.9rem 2.5rem;
   border-radius: 70px;
-  color: white;
-  background-color: black;
+  color: #fff;
+  background-color: #000;
   font-weight: 600;
-  font-size: 20px;
+  font-size: 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.lgsbt button:hover {
+  background-color: #333;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+  .HeroCaption {
+    font-size: 2.5rem;
+    padding: 10rem 3rem 2.5rem 3rem;
+  }
+
+  .lgsbt button {
+    font-size: 1.1rem;
+    padding: 0.8rem 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .Hero {
+    height: auto;
+    min-height: 70vh;
+    padding: 4rem 1.5rem;
+  }
+
+  .HeroCaption {
+    font-size: 2.1rem;
+    padding: 8rem 2rem 2rem 2rem;
+  }
+
+  .lgsbt button {
+    font-size: 1rem;
+    padding: 0.7rem 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .Hero {
+    height: auto;
+    padding: 3rem 1rem;
+  }
+
+  .HeroCaption {
+    font-size: 1.6rem;
+    line-height: 1.4;
+    padding: 6rem 1rem 2rem 1rem;
+  }
+
+  .lgsbt button {
+    font-size: 0.95rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+  }
 }

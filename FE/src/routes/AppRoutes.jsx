@@ -9,6 +9,7 @@ import SignUp from "../pages/SignUp";
 import WorkoutPlan from "../pages/WorkoutPlan";
 import ProtectedRoute from "../components/ProtectedRoute"; // import the guard
 import DietPlan from "../pages/DietPlan";
+import Measurements from "../pages/Measurements";
 
 function AppRoutes() {
   return (
@@ -16,7 +17,6 @@ function AppRoutes() {
       <Route path="/" element={<Login />} />
       <Route path="/SignUp" element={<SignUp />} />
 
-      {/* Protected routes */}
       <Route
         path="/Home"
         element={
@@ -62,6 +62,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <DietPlan />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/Measurements"
+        element={
+          <ProtectedRoute>
+            <Measurements />
           </ProtectedRoute>
         }
       />
