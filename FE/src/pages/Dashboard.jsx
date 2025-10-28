@@ -21,9 +21,7 @@ function Dashboard() {
           Rise And Shine,<span className="highlight"> {username}</span>
         </h1>
 
-        {/* === Top Section === */}
         <div className="top-section">
-          {/* Red Card */}
           <div className="card red-card">
             <p className="card-title">Hello,</p>
             <p className="card-text">
@@ -31,14 +29,12 @@ function Dashboard() {
             </p>
           </div>
 
-          {/* White Cards */}
           <div className="card white-card"><a href="/DietPlan" style={{ textDecoration: 'none', color: '#1A1A1A' }}>Diet Plan</a></div>
-          <div className="card white-card">Measurements</div>
+          <div className="card white-card"><a href="/Measurements" style={{ textDecoration: 'none', color: '#1A1A1A' }}>Measurements</a></div>
           <div className="card white-card"><a href="/WorkoutPlan" style={{ textDecoration: 'none', color: '#1A1A1A' }}>Workout split</a></div>
           <div className="card white-card">Exercise index</div>
         </div>
 
-        {/* === Bottom Section === */}
         <div className="bottom-section">
           <div className="card white-card progress-card">
             <h3 className="card-subtitle">Progress checker</h3>
