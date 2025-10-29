@@ -23,6 +23,7 @@ const Measurements = () => {
 
     const [loading, setLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const axiosInstance = axios.create({
         baseURL: API_BASE,
@@ -74,7 +75,17 @@ const Measurements = () => {
         e.preventDefault();
 
         if (!userId) {
-            alert("User not found. Please log in again.");
+            setErrorMessage("User not found. Please log in again.");
+            setTimeout(() => setErrorMessage(""), 3000);
+            return;
+        }
+        const hasEmpty = Object.values(formData).some(
+            (val) => val === "" || val === null
+        );
+
+        if (hasEmpty) {
+            setErrorMessage("Please fill in all fields before saving.");
+            setTimeout(() => setErrorMessage(""), 3000);
             return;
         }
 
@@ -91,21 +102,11 @@ const Measurements = () => {
             });
 
             setSuccessMessage("Measurements saved successfully!");
-            setFormData({
-                chest: "",
-                waist: "",
-                hips: "",
-                thighs: "",
-                upperArms: "",
-                neck: "",
-                height: "",
-                weight: "",
-            });
-
             setTimeout(() => setSuccessMessage(""), 3000);
         } catch (err) {
             console.error("Error saving measurements:", err);
-            alert("Failed to save measurements. Check console for details.");
+            setErrorMessage("Failed to save measurements.");
+            setTimeout(() => setErrorMessage(""), 3000);
         }
     };
 
@@ -115,11 +116,15 @@ const Measurements = () => {
         <div>
             <NavBar />
             <div className="measurements-container">
-                <div className="measurements-card light-theme">
+                <div className="measurements-card">
                     <h2 className="measurements-title">Enter Your Measurements</h2>
 
+                    {/* Snackbar Notifications */}
                     {successMessage && (
-                        <div className="success-popup">{successMessage}</div>
+                        <div className="snackbar success">{successMessage}</div>
+                    )}
+                    {errorMessage && (
+                        <div className="snackbar error">{errorMessage}</div>
                     )}
 
                     <form onSubmit={handleSubmit}>
@@ -134,10 +139,11 @@ const Measurements = () => {
                                 { name: "height", label: "Height (cm)" },
                                 { name: "weight", label: "Weight (kg)" },
                             ].map((field) => (
-                                <div className="form-group" key={field.name}>
-                                    <label>{field.label}</label>
+                                <div className="input-group" key={field.name}>
+                                    <label htmlFor={field.name}>{field.label}</label>
                                     <input
                                         type="number"
+                                        id={field.name}
                                         name={field.name}
                                         placeholder={`Enter ${field.label}`}
                                         value={formData[field.name]}
@@ -148,13 +154,14 @@ const Measurements = () => {
                         </div>
 
                         <div className="button-wrapper">
-                            <button type="submit" className="save-btn">
+                            <button type="submit" className="save-button">
                                 Save Measurements
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     );
 };

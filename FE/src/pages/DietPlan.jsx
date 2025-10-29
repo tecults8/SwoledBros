@@ -60,28 +60,28 @@ const DietPlan = () => {
 
   if (isLoading) {
     return (
-      <>
+      <div>
         <NavBar />
         <div className="diet-container">
           <p>Loading diet plan...</p>
         </div>
-      </>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <>
+      <div>
         <NavBar />
         <div className="diet-container">
           <p className="error">{error}</p>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div>
       <NavBar />
       <div className="diet-container">
         <h1 className="diet-title">Diet Plan</h1>
@@ -111,7 +111,7 @@ const DietPlan = () => {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
