@@ -26,7 +26,7 @@ function Dashboard() {
             <p className="card-title">Hello,</p>
             <p className="card-text">
               {user?.weight === 0 ? (
-                <span>Please add your weight</span>
+                <span>Please add your weight in measurement tab</span>
               ) : (
                 <span>
                   Your current weight is{" "}
