@@ -34,9 +34,11 @@ namespace SwoledBrosBE.Controllers
             if (await _context.Users.AnyAsync(u => u.Username == request.Username))
                 return BadRequest(new { message = "Username already exists." });
 
+            // Generate salt
             byte[] saltBytes = RandomNumberGenerator.GetBytes(16);
             string salt = Convert.ToBase64String(saltBytes);
 
+            // Hash password
             string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: request.Password,
                 salt: saltBytes,
@@ -44,8 +46,17 @@ namespace SwoledBrosBE.Controllers
                 iterationCount: 10000,
                 numBytesRequested: 32));
 
+            // ✅ Generate unique random 3-digit ID
+            var random = new Random();
+            int randomId;
+            do
+            {
+                randomId = random.Next(100, 1000); // generates a number between 100–999
+            } while (await _context.Users.AnyAsync(u => u.Id == randomId));
+
             var user = new User
             {
+                Id = randomId,
                 Username = request.Username,
                 Email = request.Email,
                 PasswordHash = hash,
@@ -55,7 +66,7 @@ namespace SwoledBrosBE.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "User registered successfully" });
+            return Ok(new { message = "User registered successfully", userId = user.Id });
         }
 
         // ---------------- SIGNIN ----------------
@@ -83,6 +94,7 @@ namespace SwoledBrosBE.Controllers
             });
         }
 
+        // ---------------- PASSWORD VERIFY ----------------
         private bool VerifyPassword(string password, string storedHash, string storedSalt)
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
@@ -96,6 +108,7 @@ namespace SwoledBrosBE.Controllers
             return computedHash == storedHash;
         }
 
+        // ---------------- TOKEN CREATION ----------------
         private string CreateToken(User user)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -120,6 +133,7 @@ namespace SwoledBrosBE.Controllers
         }
     }
 
+    // ---------------- DTOs ----------------
     public class UserRegisterDto
     {
         public string Username { get; set; }
