@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
@@ -36,6 +37,7 @@ const Login = () => {
     try {
       const hashed = await hashPassword(password);
 
+      // Step 1: Sign in
       const res = await fetch("https://localhost:7239/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,19 +48,50 @@ const Login = () => {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error("Login failed");
+      if (!res.ok) throw new Error(data.message || "Login failed");
 
-      localStorage.setItem("jwtToken", data.token);
-      localStorage.setItem("userId", data.id);
-      localStorage.setItem("user", JSON.stringify(data));
+      const token = data.token;
+      const userId = data.id;
 
+      // Step 2: Fetch user info from correct endpoint
+      const userRes = await fetch(
+        `https://localhost:7239/api/auth/user/${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const userData = await userRes.json();
+      if (!userRes.ok)
+        throw new Error(userData.message || "Failed to fetch user details");
+
+      // Step 3: Store in localStorage
+      localStorage.setItem("jwtToken", token);
+      localStorage.setItem("userId", userId);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: userData.id,
+          username: userData.username,
+          email: userData.email,
+          isAdmin: userData.isAdmin ?? false,
+          weight: userData.weight ?? 0, // ✅ store user weight
+          token: token,
+        })
+      );
       setSuccess("Login successful!");
       setUsername("");
       setPassword("");
 
+      // ✅ Navigate to Home
       setTimeout(() => navigate("/Home"), 800);
     } catch (err) {
-      setError('Please Sign Up before signing in...');
+      console.error("Login error:", err);
+      setError(err.message || "Please Sign Up before signing in...");
     } finally {
       setLoading(false);
     }

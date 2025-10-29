@@ -46,7 +46,7 @@ namespace SwoledBrosBE.Controllers
                 iterationCount: 10000,
                 numBytesRequested: 32));
 
-            // ✅ Generate unique random 3-digit ID
+            // Generate unique random 3-digit ID
             var random = new Random();
             int randomId;
             do
@@ -60,7 +60,8 @@ namespace SwoledBrosBE.Controllers
                 Username = request.Username,
                 Email = request.Email,
                 PasswordHash = hash,
-                PasswordSalt = salt
+                PasswordSalt = salt,
+                IsAdmin = false // Default for new users
             };
 
             _context.Users.Add(user);
@@ -90,8 +91,30 @@ namespace SwoledBrosBE.Controllers
                 id = user.Id,
                 username = user.Username,
                 email = user.Email,
+                isAdmin = user.IsAdmin,
                 token = token
             });
+        }
+
+        // ---------------- GET USER DETAILS (for frontend) ----------------
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new
+                {
+                    u.Id,
+                    u.Username,
+                    u.Email,
+                    u.IsAdmin,u.Weight
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                return NotFound(new { message = "User not found." });
+
+            return Ok(user);
         }
 
         // ---------------- PASSWORD VERIFY ----------------
