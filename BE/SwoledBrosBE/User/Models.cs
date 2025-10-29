@@ -18,6 +18,11 @@ namespace SwoledBrosBE.Models.FitnessApp.Models
 
         public double? Height { get; set; }
         public double? Weight { get; set; }
+        public double? Chest { get; set; }
+        public double? Waist { get; set; }
+        public double? Hips { get; set; }
+        public double? Thighs { get; set; }
+        public double? UpperArms { get; set; }
 
         public ICollection<DietPlan>? DietPlans { get; set; }
         public ICollection<WorkoutSplit>? WorkoutSplits { get; set; }
