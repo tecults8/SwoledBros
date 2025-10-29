@@ -87,14 +87,27 @@ namespace SwoledBrosBE.Controllers
             var dietPlan = new DietPlan
             {
                 UserId = user.Id,
-                Date = DateTime.UtcNow.Date,
-                Breakfast = new Meal { Items = model.Breakfast.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
-                Lunch = new Meal { Items = model.Lunch.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
-                Dinner = new Meal { Items = model.Dinner.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
-                BrunchSnack = new Meal { Items = model.BrunchSnack.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
-                EveningSnack = new Meal { Items = model.EveningSnack.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() },
-                PreBedSnack = new Meal { Items = model.PreBedSnack.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() }
+                Date = DateTime.UtcNow.Date
             };
+
+            // Only add meals if the list has actual data
+            if (model.Breakfast?.Any(i => !string.IsNullOrWhiteSpace(i.FoodName) || i.Quantity > 0) == true)
+                dietPlan.Breakfast = new Meal { Items = model.Breakfast.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() };
+
+            if (model.Lunch?.Any(i => !string.IsNullOrWhiteSpace(i.FoodName) || i.Quantity > 0) == true)
+                dietPlan.Lunch = new Meal { Items = model.Lunch.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() };
+
+            if (model.Dinner?.Any(i => !string.IsNullOrWhiteSpace(i.FoodName) || i.Quantity > 0) == true)
+                dietPlan.Dinner = new Meal { Items = model.Dinner.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() };
+
+            if (model.BrunchSnack?.Any(i => !string.IsNullOrWhiteSpace(i.FoodName) || i.Quantity > 0) == true)
+                dietPlan.BrunchSnack = new Meal { Items = model.BrunchSnack.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() };
+
+            if (model.EveningSnack?.Any(i => !string.IsNullOrWhiteSpace(i.FoodName) || i.Quantity > 0) == true)
+                dietPlan.EveningSnack = new Meal { Items = model.EveningSnack.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() };
+
+            if (model.PreBedSnack?.Any(i => !string.IsNullOrWhiteSpace(i.FoodName) || i.Quantity > 0) == true)
+                dietPlan.PreBedSnack = new Meal { Items = model.PreBedSnack.Select(i => new MealItem { FoodName = i.FoodName, Quantity = i.Quantity }).ToList() };
 
             _context.DietPlans.Add(dietPlan);
             await _context.SaveChangesAsync();
