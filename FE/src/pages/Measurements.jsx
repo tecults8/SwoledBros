@@ -9,6 +9,8 @@ const Measurements = () => {
         hips: "",
         thighs: "",
         upperArms: "",
+        neck: "",
+        height: "",
         weight: "",
     });
 
@@ -31,72 +33,45 @@ const Measurements = () => {
             <div className="measurements-container">
                 <div className="measurements-card light-theme">
                     <h2 className="measurements-title">Enter Your Measurements</h2>
-                    <form onSubmit={handleSubmit}>
+                    <form>
                         <div className="form-grid">
                             <div className="form-group">
                                 <label>Chest (cm)</label>
-                                <input
-                                    type="text"
-                                    name="chest"
-                                    placeholder="Enter Chest (cm)"
-                                    value={formData.chest}
-                                    onChange={handleChange}
-                                />
+                                <input type="number" placeholder="Enter Chest (cm)" />
                             </div>
                             <div className="form-group">
                                 <label>Waist (cm)</label>
-                                <input
-                                    type="text"
-                                    name="waist"
-                                    placeholder="Enter Waist (cm)"
-                                    value={formData.waist}
-                                    onChange={handleChange}
-                                />
+                                <input type="number" placeholder="Enter Waist (cm)" />
                             </div>
                             <div className="form-group">
                                 <label>Hips (cm)</label>
-                                <input
-                                    type="text"
-                                    name="hips"
-                                    placeholder="Enter Hips (cm)"
-                                    value={formData.hips}
-                                    onChange={handleChange}
-                                />
+                                <input type="number" placeholder="Enter Hips (cm)" />
                             </div>
                             <div className="form-group">
                                 <label>Thighs (cm)</label>
-                                <input
-                                    type="text"
-                                    name="thighs"
-                                    placeholder="Enter Thighs (cm)"
-                                    value={formData.thighs}
-                                    onChange={handleChange}
-                                />
+                                <input type="number" placeholder="Enter Thighs (cm)" />
                             </div>
                             <div className="form-group">
                                 <label>Upper Arms (cm)</label>
-                                <input
-                                    type="text"
-                                    name="upperArms"
-                                    placeholder="Enter Upper Arms (cm)"
-                                    value={formData.upperArms}
-                                    onChange={handleChange}
-                                />
+                                <input type="number" placeholder="Enter Upper Arms (cm)" />
+                            </div>
+                            <div className="form-group">
+                                <label>Neck (cm)</label>
+                                <input type="number" placeholder="Enter Neck (cm)" />
+                            </div>
+                            <div className="form-group">
+                                <label>Height (cm)</label>
+                                <input type="number" placeholder="Enter Height (cm)" />
                             </div>
                             <div className="form-group">
                                 <label>Weight (kg)</label>
-                                <input
-                                    type="text"
-                                    name="weight"
-                                    placeholder="Enter Weight (kg)"
-                                    value={formData.weight}
-                                    onChange={handleChange}
-                                />
+                                <input type="number" placeholder="Enter Weight (kg)" />
                             </div>
                         </div>
-                        <button type="submit" className="save-btn">
-                            Save Measurements
-                        </button>
+
+                        <div className="button-wrapper">
+                            <button type="submit" className="save-btn">Save Measurements</button>
+                        </div>
                     </form>
                 </div>
             </div>
