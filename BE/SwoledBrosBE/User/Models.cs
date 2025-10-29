@@ -13,6 +13,7 @@ namespace SwoledBrosBE.Models.FitnessApp.Models
         [Required] public string Email { get; set; }
         [Required] public string PasswordHash { get; set; }
         [Required] public string PasswordSalt { get; set; }
+        public Boolean? IsAdmin { get; set; }
         public DateOnly? MembershipStartDate { get; set; }
         public DateOnly? MembershipEndDate { get; set; }
 
