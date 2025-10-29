@@ -23,6 +23,7 @@ const Measurements = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // ✅ Configure axios instance with auth header
   const axiosInstance = axios.create({
@@ -95,7 +96,21 @@ const Measurements = () => {
         weight: parseFloat(formData.weight) || null,
       });
 
-      alert("Measurements saved successfully!");
+      // ✅ Success popup + reset
+      setSuccessMessage("Measurements saved successfully!");
+      setFormData({
+        chest: "",
+        waist: "",
+        hips: "",
+        thighs: "",
+        upperArms: "",
+        neck: "",
+        height: "",
+        weight: "",
+      });
+
+      // Hide message after 3 seconds
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (err) {
       console.error("Error saving measurements:", err);
       alert("Failed to save measurements. Check console for details.");
@@ -110,6 +125,11 @@ const Measurements = () => {
       <div className="measurements-container">
         <div className="measurements-card light-theme">
           <h2 className="measurements-title">Enter Your Measurements</h2>
+
+          {/* ✅ Green popup message */}
+          {successMessage && (
+            <div className="success-popup">{successMessage}</div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="form-grid">
