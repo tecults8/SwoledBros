@@ -111,7 +111,7 @@ const WorkoutSplitComponent = () => {
     <div>
       <NavBar />
       <div className="workout-container">
-        <h1>Workout Split</h1>
+        <h1 className="title">Workout Split</h1>
         <div className="day-nav">
           {DAYS_OF_WEEK.map((day) => (
             <button

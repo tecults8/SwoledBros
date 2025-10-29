@@ -184,5 +184,6 @@ body::-webkit-scrollbar {
 @media (max-width: 600px) {
     .dashboard-title {
         font-size: 32px;
+        letter-spacing: -0.12rem;
     }
 }

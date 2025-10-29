@@ -42,11 +42,6 @@ function NavBar() {
             </Link>
           </li>
           <li>
-            <Link to="/AboutUs" onClick={() => setMenuOpen(false)}>
-              About us
-            </Link>
-          </li>
-          <li>
             <Link to={token ? "/Contact" : "/"} onClick={() => setMenuOpen(false)}>
               Contact
             </Link>
