@@ -1,3 +1,6 @@
+*{
+    font-weight: bold;
+}
 /* ===== General Layout ===== */
 .dashboard {
     font-family: "Poppins", Arial, sans-serif;
@@ -14,10 +17,11 @@
 
 /* ===== Title ===== */
 .dashboard-title {
-    font-size: 48px;
+    font-size: 50px;
     font-weight: 700;
     color: #1a1a1a;
     margin-bottom: 40px;
+    letter-spacing: -0.25rem;
 }
 
 .highlight {
@@ -180,5 +184,6 @@ body::-webkit-scrollbar {
 @media (max-width: 600px) {
     .dashboard-title {
         font-size: 32px;
+        letter-spacing: -0.12rem;
     }
 }
