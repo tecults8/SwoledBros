@@ -37,7 +37,6 @@ const Login = () => {
     try {
       const hashed = await hashPassword(password);
 
-      // Step 1: Sign in
       const res = await fetch("https://localhost:7239/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,7 +52,6 @@ const Login = () => {
       const token = data.token;
       const userId = data.id;
 
-      // Step 2: Fetch user info from correct endpoint
       const userRes = await fetch(
         `https://localhost:7239/api/auth/user/${userId}`,
         {

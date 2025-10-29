@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Nav.css";
 
@@ -6,6 +6,7 @@ function NavBar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("jwtToken");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
@@ -15,6 +16,13 @@ function NavBar() {
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
 
   return (
     <nav className="navbar">
@@ -34,7 +42,6 @@ function NavBar() {
           <div className={menuOpen ? "bar open" : "bar"}></div>
         </div>
 
-        {/* Navigation Links */}
         <ul className={menuOpen ? "nav-links active" : "nav-links"}>
           <li>
             <Link to={token ? "/Home" : "/"} onClick={() => setMenuOpen(false)}>
@@ -46,11 +53,11 @@ function NavBar() {
               Contact
             </Link>
           </li>
-          <li>
+          {user?.isAdmin && <li>
             <Link to={token ? "/Admin" : "/"} onClick={() => setMenuOpen(false)}>
               Admin
             </Link>
-          </li>
+          </li>}
           <li>
             <Link to={token ? "/Dashboard" : "/"} onClick={() => setMenuOpen(false)}>
               Dashboard
