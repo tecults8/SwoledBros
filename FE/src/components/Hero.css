@@ -14,8 +14,19 @@
   text-align: center;
   padding: 0 2rem;
   background-color: #fff;
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .HeroCaption {
   font-size: 7rem;
   letter-spacing: -0.40rem;
@@ -23,12 +34,21 @@
   font-weight: 700;
   color: #000;
   padding: 12rem 4rem 3rem 4rem;
+
 }
 
 .lgsbt {
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: fadeIn 1s ease-out 0.4s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .lgsbt button {
@@ -97,3 +117,4 @@
     border-radius: 50px;
   }
 }
+

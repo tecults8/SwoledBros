@@ -1,16 +1,27 @@
+
 /* Overall Layout */
 .workout-container {
   min-height: 100vh;
   background-color: #f9fafb;
   padding: 2rem;
-  font-family: "Inter", sans-serif;
+  animation: fadeInUp 0.8s ease-out forwards;
 }
 
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 .title {
   font-size: 2.5rem;
   font-weight: 900;
   letter-spacing: -0.1rem;
-  color: #1f2937;
+  color: #000000;
   display: inline-block;
   margin-bottom: 2rem;
 }
@@ -137,4 +148,11 @@
 .rest-text {
   color: #6b7280;
   margin-top: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .day-btn{
+     width: 2.5rem;
+    height: 2.5rem;
+  }
 }

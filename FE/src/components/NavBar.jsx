@@ -42,17 +42,14 @@ function NavBar() {
           <div className={menuOpen ? "bar open" : "bar"}></div>
         </div>
 
+        {/* Navigation Links */}
         <ul className={menuOpen ? "nav-links active" : "nav-links"}>
           <li>
             <Link to={token ? "/Home" : "/"} onClick={() => setMenuOpen(false)}>
               Home
             </Link>
           </li>
-          <li>
-            <Link to={token ? "/Contact" : "/"} onClick={() => setMenuOpen(false)}>
-              Contact
-            </Link>
-          </li>
+       
           {user?.isAdmin && <li>
             <Link to={token ? "/Admin" : "/"} onClick={() => setMenuOpen(false)}>
               Admin
@@ -61,6 +58,11 @@ function NavBar() {
           <li>
             <Link to={token ? "/Dashboard" : "/"} onClick={() => setMenuOpen(false)}>
               Dashboard
+            </Link>
+          </li>
+          <li>
+            <Link to={token ? "/Contact" : "/"} onClick={() => setMenuOpen(false)}>
+              Contact
             </Link>
           </li>
           <div className="bt-mobile">

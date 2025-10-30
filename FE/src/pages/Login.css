@@ -5,19 +5,23 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  font-family: "Poppins", Arial, sans-serif;
+  font-family: "Inter";
+  letter-spacing: -0.2rem;
   background-color: #ffffff;
   padding: 20px;
   box-sizing: border-box;
 }
 
 /* ===== Title ===== */
-.title {
-  font-size: 2.5rem;
+.titleText {
+  font-size: 3rem;
   font-weight: 700;
-  color: #111;
+  letter-spacing: -0.1rem;
+  color: #000000;
   margin-bottom: 2rem;
   text-align: center;
+  font-family: "Helvetica";
+  
 }
 
 /* ===== Form ===== */
@@ -32,6 +36,7 @@
   padding: 30px 20px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  gap:45px
 }
 
 /* ===== Input fields ===== */
@@ -42,9 +47,9 @@
 }
 
 .form-group input {
-  width: 80%;
+  width: 90%;
   /* ✅ prevent full stretch */
-  max-width: 260px;
+  max-width: 280px;
   border: none;
   border-bottom: 2px solid #222;
   padding: 10px 5px;

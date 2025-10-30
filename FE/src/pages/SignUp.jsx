@@ -64,7 +64,7 @@ function SignUp() {
 
   return (
     <div className="login-container">
-      <h1 className="title">Rise And Shine</h1>
+      <h1 className="titleText">Rise And Shine</h1>
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <input
