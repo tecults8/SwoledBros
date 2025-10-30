@@ -15,14 +15,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// CORS (React frontend)
+//  UPDATED CORS POLICY TO ALLOW ANY ORIGIN
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowAllOrigins", policy =>
     {
-        policy.WithOrigins("https://localhost:5173")
+        policy.AllowAnyOrigin() // <--- This allows requests from ANY domain
               .AllowAnyHeader()
               .AllowAnyMethod();
+        // NOTE: AllowAnyOrigin() cannot be used with .AllowCredentials().
+        // If you need cookies/credentials, you must list specific origins.
     });
 });
 
@@ -59,7 +61,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowFrontend");
+
+
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
