@@ -20,9 +20,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("https://localhost:5173", // Your local frontend
-                           "https://swoledbros-9.onrender.com", // Your deployed frontend (if it exists)
-                           "http://localhost:5173") // Use http too, just in case
+        policy.WithOrigins("https://localhost:5173", //  local frontend
+                           "https://swoledbros-9.onrender.com", //  deployed frontend (if it exists)
+                           "http://localhost:5173", "https://swolebros.in") // Use http too, just in case
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials(); // Essential if passing cookies or authorization headers
