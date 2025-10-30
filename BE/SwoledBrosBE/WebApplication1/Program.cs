@@ -18,16 +18,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 //  UPDATED CORS POLICY TO ALLOW ANY ORIGIN
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins", policy =>
+    options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.AllowAnyOrigin() // <--- This allows requests from ANY domain
+        policy.WithOrigins("https://localhost:5173", // Your local frontend
+                           "https://swoledbros-9.onrender.com", // Your deployed frontend (if it exists)
+                           "http://localhost:5173") // Use http too, just in case
               .AllowAnyHeader()
-              .AllowAnyMethod();
-        // NOTE: AllowAnyOrigin() cannot be used with .AllowCredentials().
-        // If you need cookies/credentials, you must list specific origins.
+              .AllowAnyMethod()
+              .AllowCredentials(); // Essential if passing cookies or authorization headers
     });
 });
-
 // JWT Authentication
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
