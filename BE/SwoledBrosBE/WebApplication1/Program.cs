@@ -15,19 +15,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//  UPDATED CORS POLICY TO ALLOW ANY ORIGIN
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
     {
-        policy.WithOrigins("https://localhost:5173", //  local frontend
-                           "https://swoledbros-9.onrender.com", //  deployed frontend (if it exists)
-                           "http://localhost:5173", "https://swolebros.in") // Use http too, just in case
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); // Essential if passing cookies or authorization headers
+        policy.WithOrigins(
+                "https://localhost:5173", // Local frontend (HTTPS)
+                "http://localhost:5173",  // Local frontend (HTTP, just in case)
+                "https://swoledbros-9.onrender.com", // Deployed Render URL
+                "https://swolebros.in" // Any other production domain
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials(); // Required for cookies or authorization headers
     });
 });
+
 // JWT Authentication
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
@@ -62,8 +65,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
