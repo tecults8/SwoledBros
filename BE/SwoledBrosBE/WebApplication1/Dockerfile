@@ -7,7 +7,8 @@ COPY . .
 
 # Restore and publish the project (include folder path)
 RUN dotnet restore "BE/SwoledBrosBE/WebApplication1/WebApplication1.csproj"
-RUN dotnet publish "BE/SwoledBrosBE/WebApplication1/WebApplication1.csproj" -c Release -o /app/publish
+RUN dotnet publish "BE/SwoledBrosBE/WebApplication1/WebApplication1.csproj" -c Release -o
+
 /app/publish
 
 # -------- RUNTIME STAGE --------
