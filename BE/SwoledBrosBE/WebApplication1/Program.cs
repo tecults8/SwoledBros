@@ -6,7 +6,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
+// --------------------
+// Services
+// --------------------
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -17,17 +19,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigins", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.WithOrigins(
-                "https://localhost:5173", // Local frontend (HTTPS)
-                "http://localhost:5173",  // Local frontend (HTTP, just in case)
-                "https://swoledbros-9.onrender.com", // Deployed Render URL
-                "https://swolebros.in" // Any other production domain
-            )
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials(); // Required for cookies or authorization headers
+        policy
+            .AllowAnyOrigin()   // Allow all domains
+            .AllowAnyHeader()   // Allow any headers (e.g., Authorization)
+            .AllowAnyMethod();  // Allow GET, POST, PUT, DELETE, etc.
     });
 });
 
@@ -54,23 +51,26 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// --------------------
+// Build app
+// --------------------
 var app = builder.Build();
 
-// Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseRouting(); 
+app.UseHttpsRedirection();
 
-app.UseCors("AllowSpecificOrigins"); 
+app.UseRouting();
+
+app.UseCors("AllowAll"); 
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHttpsRedirection();
-
 app.MapControllers();
+
 app.Run();
