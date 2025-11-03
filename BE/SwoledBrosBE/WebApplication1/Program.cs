@@ -4,15 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-
 using SwoledBrosBE.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//  Add Controllers
 builder.Services.AddControllers();
 
-//  Configure DbContext with PostgreSQL (from environment or appsettings)
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
                        ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -22,9 +19,8 @@ if (string.IsNullOrWhiteSpace(connectionString))
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)));
 
-//  Configure CORS (Allow Any Origin)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -35,13 +31,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add Swagger (optional for debugging)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Middleware Pipeline
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Production")
 {
     app.UseSwagger();
@@ -50,13 +44,22 @@ if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Produ
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
-app.UseCors("AllowAll");  
-
+app.UseCors("AllowAll");
 app.UseAuthorization();
-
 app.MapControllers();
 
+app.MapGet("/debug/db", async (AppDbContext db) =>
+{
+    try
+    {
+        var canConnect = await db.Database.CanConnectAsync();
+        return Results.Ok(canConnect ? "DB Connection Successful" : " DB Connection Failed");
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($" DB Error: {ex.Message}");
+    }
+});
 
 try
 {
@@ -64,7 +67,7 @@ try
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         db.Database.CanConnect();
-        Console.WriteLine(" Connected to PostgreSQL successfully!");
+        Console.WriteLine("Connected to PostgreSQL successfully!");
     }
 }
 catch (Exception ex)

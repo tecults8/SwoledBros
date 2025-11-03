@@ -36,15 +36,18 @@ function SignUp() {
     try {
       const hashed = await hashPassword(password);
 
-      const res = await fetch("https://localhost:7239/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: name,
-          email: email,
-          password: hashed,
-        }),
-      });
+      const res = await fetch(
+        "https://swoledbros-9.onrender.com/api/auth/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: name,
+            email: email,
+            password: hashed,
+          }),
+        }
+      );
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Signup failed");
