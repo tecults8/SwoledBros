@@ -8,19 +8,22 @@ using SwoledBrosBE.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ? Add Controllers
 builder.Services.AddControllers();
 
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+// ? Use Render’s connection string (environment variable)
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
                        ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
-    throw new InvalidOperationException("DATABASE_URL or DefaultConnection not set in environment.");
+    throw new InvalidOperationException("Database connection string not set in environment.");
 }
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)));
 
+// ? Allow CORS for frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -36,43 +39,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Production")
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// ? Configure the port for Render
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://0.0.0.0:{port}");
 
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseCors("AllowAll");
-app.UseAuthorization();
-app.MapControllers();
-
-app.MapGet("/debug/db", async (AppDbContext db) =>
-{
-    try
-    {
-        var canConnect = await db.Database.CanConnectAsync();
-        return Results.Ok(canConnect ? "DB Connection Successful" : " DB Connection Failed");
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem($" DB Error: {ex.Message}");
-    }
-});
-
-try
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        db.Database.CanConnect();
-        Console.WriteLine("Connected to PostgreSQL successfully!");
-    }
-}
-catch (Exception ex)
-{
-    Console.WriteLine("Database connection failed: " + ex.Message);
-}
-
-app.Run();
+// ? Swagger (optional in
