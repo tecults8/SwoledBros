@@ -1,76 +1,75 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+
 using SwoledBrosBE.Models;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --------------------
-// Services
-// --------------------
+//  Add Controllers
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-// Database
+//  Configure DbContext with PostgreSQL (from environment or appsettings)
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
+                       ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("DATABASE_URL or DefaultConnection not set in environment.");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
+//  Configure CORS (Allow Any Origin)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy
-            .AllowAnyOrigin()   // Allow all domains
-            .AllowAnyHeader()   // Allow any headers (e.g., Authorization)
-            .AllowAnyMethod();  // Allow GET, POST, PUT, DELETE, etc.
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
-// JWT Authentication
-var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+// Add Swagger (optional for debugging)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ClockSkew = TimeSpan.Zero
-    };
-});
-
-// --------------------
-// Build app
-// --------------------
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+// Middleware Pipeline
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Production")
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
 
-app.UseCors("AllowAll"); 
+app.UseCors("AllowAll");  
 
-app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
+try
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.CanConnect();
+        Console.WriteLine(" Connected to PostgreSQL successfully!");
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Database connection failed: " + ex.Message);
+}
 
 app.Run();
