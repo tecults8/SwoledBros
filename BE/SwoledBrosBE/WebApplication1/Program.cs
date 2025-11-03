@@ -5,26 +5,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using SwoledBrosBE.Models;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// -------------------- SERVICES --------------------
+// Add controllers
 builder.Services.AddControllers();
 
-// Get connection string from environment or appsettings.json
-var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
-                       ?? builder.Configuration.GetConnectionString("DefaultConnection");
+//  Use connection string from appsettings.json directly
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 if (string.IsNullOrWhiteSpace(connectionString))
 {
-    throw new InvalidOperationException("Database connection string not set in environment.");
+    throw new InvalidOperationException("DefaultConnection not found in appsettings.json.");
 }
 
-// Register PostgreSQL with retry policy
+//  Configure DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString, o => o.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null)));
+    options.UseNpgsql(connectionString, o =>
+        o.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null))
+);
 
-// Enable CORS for frontend (React, etc.)
+//  Configure CORS (for React frontend)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -35,21 +37,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Swagger setup
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// -------------------- APP CONFIGURATION --------------------
-
-// Configure correct Render port
+//  Bind Render-assigned port (Render sets PORT=8080 by default)
 var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-app.Urls.Clear(); // Ensure no other bindings (e.g. :10000)
 app.Urls.Add($"http://0.0.0.0:{port}");
-Console.WriteLine($" Running on port {port}");
 
-// Enable Swagger in Development and Production
+// Enable Swagger in both Dev and Production
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Production")
 {
     app.UseSwagger();
@@ -61,38 +58,36 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("AllowAll");
 app.UseAuthorization();
-
 app.MapControllers();
 
-// -------------------- DEBUG ENDPOINT --------------------
+//Add DB connection test endpoint
 app.MapGet("/debug/db", async (AppDbContext db) =>
 {
     try
     {
         var canConnect = await db.Database.CanConnectAsync();
-        return Results.Ok(canConnect ? "DB Connection Successful" : " DB Connection Failed");
+        return Results.Ok(canConnect ? "DB Connection Successful " : "DB Connection Failed ");
     }
     catch (Exception ex)
     {
-        return Results.Problem($" DB Error: {ex.Message}");
+        return Results.Problem($"DB Error: {ex.Message}");
     }
 });
 
-// -------------------- DB TEST CONNECTION --------------------
+// Test database connection during startup
 try
 {
     using (var scope = app.Services.CreateScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        if (db.Database.CanConnect())
-            Console.WriteLine(" Connected to PostgreSQL successfully!");
-        else
-            Console.WriteLine(" Failed to connect to PostgreSQL.");
+        db.Database.CanConnect();
+        Console.WriteLine("Connected to PostgreSQL successfully!");
     }
 }
 catch (Exception ex)
 {
-    Console.WriteLine(" Database connection failed: " + ex.Message);
+    Console.WriteLine("Database connection failed: " + ex.Message);
 }
 
+//  Run the app
 app.Run();
