@@ -204,7 +204,7 @@ export default function AdminDashboardCompactInline() {
     const fetchUsers = async () => {
       try {
         const res = await axios.get(
-          "https://localhost:7239/api/admin/UsersWithPlans",
+          "https://swoledbros-9.onrender.com/api/admin/UsersWithPlans",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -234,7 +234,7 @@ export default function AdminDashboardCompactInline() {
       setMembershipError("");
       try {
         const res = await axios.get(
-          `https://localhost:7239/api/admin/Membership/${selectedUser}`,
+          `https://swoledbros-9.onrender.com/api/admin/Membership/${selectedUser}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -359,7 +359,7 @@ export default function AdminDashboardCompactInline() {
 
     try {
       await axios.post(
-        `https://localhost:7239/api/admin/AddDietPlan/${selectedUser}`,
+        `https://swoledbros-9.onrender.com/api/admin/AddDietPlan/${selectedUser}`,
         dietPlan,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -398,7 +398,7 @@ export default function AdminDashboardCompactInline() {
 
     try {
       await axios.post(
-        `https://localhost:7239/api/admin/AddWorkoutSplit/${selectedUser}`,
+        `https://swoledbros-9.onrender.com/api/admin/AddWorkoutSplit/${selectedUser}`,
         workoutSplit,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -425,7 +425,7 @@ export default function AdminDashboardCompactInline() {
     setMembershipError("");
     try {
       await axios.put(
-        `https://localhost:7239/api/admin/UpdateMembership/${selectedUser}`,
+        `https://swoledbros-9.onrender.com/api/admin/UpdateMembership/${selectedUser}`,
         {
           membershipStartDate: membership.startDate || null,
           membershipEndDate: membership.endDate || null,

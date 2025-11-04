@@ -33,7 +33,7 @@ const WorkoutSplitComponent = () => {
 
         const token = localStorage.getItem("jwtToken");
         const response = await fetch(
-          `https://localhost:7239/api/Admin/Workout/${userId}`,
+          `https://swoledbros-9.onrender.com/api/Admin/Workout/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

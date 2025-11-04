@@ -18,7 +18,7 @@ const DietPlan = () => {
         if (!userId) throw new Error("User not found in local storage");
 
         const response = await fetch(
-          `https://localhost:7239/api/Admin/DietPlan/${userId}`
+          `https://swoledbros-9.onrender.com/api/Admin/DietPlan/${userId}`
         );
         if (!response.ok) throw new Error("Failed to fetch diet plan");
         const data = await response.json();
